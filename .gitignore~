@@ -1,1 +1,3 @@
 .vs
+bin/intermediates
+bin/Win32/Debug

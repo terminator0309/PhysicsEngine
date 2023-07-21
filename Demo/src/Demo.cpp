@@ -2,7 +2,7 @@
 
 namespace game {
     struct WindowSize {
-        static const int height = 600;
+        static const int height = 800;
         static const int width = 800;
     } WINDOW;
 
@@ -29,7 +29,10 @@ namespace game {
 
         pe::util::Random::init();
 
-        game::DynamicWorld dw;
+        game::DynamicWorld dw(WINDOW.width, WINDOW.height);
+        //dw.setGravity(pe::Vector2f(0.0f));
+
+        
 
         while (window.isOpen())
         {
@@ -40,6 +43,10 @@ namespace game {
                     handleWindowClose(window);
 
                 if (event.type == event.MouseButtonReleased and event.mouseButton.button == sf::Mouse::Left) {
+                    for (int i = 0; i < 1; i++) {
+                        dw.addEntity(new game::CircleEntity(pe::Vector2f(100.0f * (i + 1)), 25));
+                    }
+                /*
                     float randomRadius = pe::util::Random::getRandom(50);
 
                     float randomXPosition = pe::util::Random::getRandom(randomRadius, WINDOW.width - randomRadius);
@@ -48,13 +55,14 @@ namespace game {
                     pe::Vector2f circleCenter = pe::Vector2f(randomXPosition, randomYPosition);
 
                     dw.addEntity(new game::CircleEntity(circleCenter, randomRadius));
+                */
                 }
             }
 
 
             window.clear();
 
-            dw.update(0.005f);
+            dw.update(0.01f);
             dw.draw(window);
 
             window.display();

@@ -3,18 +3,18 @@
 #include<algorithm>
 
 #include "Object.hpp"
-#include "Collider.hpp"
+#include "collider/Collider.hpp"
 #include "Solver.hpp"
 
 namespace pe{
     class PhysicsWorld 
     {
         std::vector<Object* > m_objects;
-        pe::Vector2f m_gravity = pe::Vector2f(0.0f, 9.8f);
+        pe::Vector2f m_gravity = pe::Vector2f(2.0f, 2.0f);
         std::vector<Solver* > solvers;
 
-        int m_WindowHeight;
-        int m_WindowWidth;
+        int m_WorldHeight;
+        int m_WorldWidth;
 
         public:
 
@@ -26,13 +26,18 @@ namespace pe{
 
             void RemoveObject(Object*);
 
+            void setGravity(pe::Vector2f);
+
             void Step(float );
+
+            ~PhysicsWorld();
+
+        private:
 
             void ResolveCollision();
 
             void Solve(std::vector<Collision>& );
 
-            ~PhysicsWorld();
 
     };
 }

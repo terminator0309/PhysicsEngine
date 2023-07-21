@@ -3,15 +3,15 @@
 namespace pe {
 
         PhysicsWorld::PhysicsWorld() {
-            m_WindowHeight = 100;
-            m_WindowWidth = 100;
+            m_WorldHeight = 100;
+            m_WorldWidth = 100;
 
             solvers.push_back(new Solver());
         }
 
-        PhysicsWorld::PhysicsWorld(int height, int width) {
-            m_WindowHeight = height;
-            m_WindowWidth = width;
+        PhysicsWorld::PhysicsWorld(int width, int height) {
+            m_WorldHeight = height;
+            m_WorldWidth = width;
 
             solvers.push_back(new Solver());
         }
@@ -28,6 +28,10 @@ namespace pe {
             m_objects.erase(itr);
         }
 
+        void PhysicsWorld::setGravity(pe::Vector2f gravity) {
+            m_gravity = gravity;
+        }
+
         void PhysicsWorld::Step(float dt) {
             for (Object* object : m_objects) {
                 object->force += m_gravity * object->mass;
@@ -36,6 +40,13 @@ namespace pe {
 
                 // Reset the force
                 object->force = pe::Vector2f();
+
+                // Bouncing of the boundary
+                if (object->transform->position._x < 0 or object->transform->position._x > m_WorldHeight)
+                    object->velocity._x *= -1;
+
+                if (object->transform->position._y < 0 or object->transform->position._y > m_WorldWidth)
+                    object->velocity._y *= -1;
             }
 
             ResolveCollision();

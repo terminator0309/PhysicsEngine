@@ -5,7 +5,7 @@ namespace pe {
         namespace Random {
 
             void init() {
-                srand(time(0));
+                srand((unsigned int)time(0));
             }
 
             float generate() {

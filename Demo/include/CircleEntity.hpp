@@ -4,6 +4,7 @@
 #include "Util.hpp"
 
 namespace game {
+    
     class CircleEntity : public Entity {
         public:
         sf::CircleShape *m_circle;  

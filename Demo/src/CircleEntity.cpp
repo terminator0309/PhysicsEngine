@@ -1,4 +1,5 @@
 #include "CircleEntity.hpp"
+#include "collider/CircleCollider.hpp"
 
 namespace game {
 

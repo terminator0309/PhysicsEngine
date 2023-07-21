@@ -19,19 +19,19 @@ namespace pe{
             return *this;
         }
 
-        Vector operator+(const Vector& other) {
+        Vector operator+(const Vector& other) const {
             return Vector(_x + other._x, _y + other._y);
         }
 
-        Vector operator-(const Vector& other) {
+        Vector operator-(const Vector& other) const {
             return Vector(_x - other._x, _y - other._y);
         }
 
-        Vector operator*(const Vector& other) {
+        Vector operator*(const Vector& other) const {
             return Vector(_x * other._x, _y * other._y);
         }
 
-        Vector operator/(const Vector& other) {
+        Vector operator/(const Vector& other) const {
             return Vector(_x / other._x, _y / other._y);
         }
 
@@ -52,6 +52,19 @@ namespace pe{
             _y += other._y;
         }
 
+        bool operator==(const Vector& other) const {
+            return _x == other._x and _y == other._y;
+        }
+
+        bool operator==(Vector& other);
+
+        T getSquare() {
+            return _x * _x + _y * _y;
+        }
+
+        T dot(Vector& other) {
+            return _x * other._x + _y * other._y;
+        }
     };
 
     typedef Vector<int> Vector2i;

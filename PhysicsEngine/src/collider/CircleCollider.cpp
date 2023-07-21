@@ -1,11 +1,10 @@
 #include "Algo.hpp"
-#include "Collider.hpp"
+#include "collider/CircleCollider.hpp"
 
 namespace pe {
-        
-        Transform::Transform(pe::Vector2f p) : position(p) {}
-    
-        CircleCollider::CircleCollider(float r) : radius(r) {};
+        CircleCollider::CircleCollider(float r) {
+            radius = r;
+        };
 
         float CircleCollider::getRadius() {
             return radius;

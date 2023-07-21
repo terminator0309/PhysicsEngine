@@ -1,8 +1,10 @@
 #pragma once
+
+#include <iostream>
+
 #include "Vector.hpp"
 #include "Random.hpp"
-#include <iostream>
-#include "Collider.hpp"
+#include "collider/Collider.hpp"
 
 namespace pe{
 

@@ -2,13 +2,15 @@
 
 namespace pe {
     Object::Object() {
+
+        // Randomly initiating velocity and mass for now
         float randomXVelocity = pe::util::Random::getRandom(-10, 10);
         float randomYVelocity = pe::util::Random::getRandom(-10, 10);
-        float randomMass = pe::util::Random::getRandom(10);
+        float randomMass = pe::util::Random::getRandom(1);
 
         velocity = pe::Vector2f(randomXVelocity, randomYVelocity);
         mass = randomMass;
-        std::cout << velocity._x << " " << velocity._y << std::endl;
+        std::cout << "Object created with velocity : " << velocity._x << " " << velocity._y << std::endl;
     }
 
     Object::Object(Object& obj) {

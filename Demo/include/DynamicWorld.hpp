@@ -7,12 +7,17 @@
 namespace game {
     class DynamicWorld {
         public:
-        pe::PhysicsWorld pw;
+            std::unique_ptr<pe::PhysicsWorld> pw;
+        
         std::vector<Entity* > entities;
+
+        DynamicWorld(int, int);
 
         void addEntity(Entity* );
 
         void removeEntity(Entity* );
+
+        void setGravity(pe::Vector2f);
 
         void update(float);
 
