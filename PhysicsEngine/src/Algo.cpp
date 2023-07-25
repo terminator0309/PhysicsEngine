@@ -461,6 +461,43 @@ namespace pe {
 
             return result;
         }
+
+        /**************************************************************/
+        // MANIFOLDS
+        /**************************************************************/
+
+        CollisionManifold findCollisionFeatures(CircleCollider* circleA, Transform* transformA, CircleCollider* circleB, Transform* transformB) {
+
+            if (not checkCircleCircleCollision(circleA, transformA, circleB, transformB))
+                return CollisionManifold();
+           
+            auto radiusA = circleA->getRadius();
+            auto centerA = transformA->position;
+
+            auto radiusB = circleB->getRadius();
+            auto centerB = transformB->position;
+
+            float sumRadii = radiusA + radiusB;
+            auto distance = centerA - centerB;
+
+            // Taking mid point as collision point as of now that why 0.5, 
+            // consider velocity and mass to calculate exact factor
+            float depth = std::abs(distance.length() - sumRadii) * 0.5f;
+            
+            pe::Vector2f normal = distance.normalize();
+
+            float distanceToPoint = radiusA - depth;
+
+            auto contactPoint = centerA + normal * distanceToPoint;
+
+            CollisionManifold result(normal, depth);
+            result.addCollisionPoint(contactPoint);
+
+            return result;
+        } 
     }
+
+
+        
     
 }

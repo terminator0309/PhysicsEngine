@@ -82,6 +82,10 @@ namespace pe{
         Vector normalize() {
             return (*this / std::sqrt(this->getSquare()));
         }
+
+        float length() {
+            return std::sqrt(this->getSquare());
+        }
     };
 
     typedef Vector<int> Vector2i;

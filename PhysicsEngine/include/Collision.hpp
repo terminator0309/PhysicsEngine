@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Object.hpp"
+#include "manifold/CollisionManifold.hpp"
 
 namespace pe {
     class Collision {
@@ -8,7 +9,9 @@ namespace pe {
         Object* obj_a;
         Object* obj_b;
 
-        Collision(pe::Object*, pe::Object*);
+        CollisionManifold manifold;
+
+        Collision(pe::Object*, pe::Object*, CollisionManifold& );
         
     };
 }

@@ -10,11 +10,11 @@ namespace pe {
             return radius;
         }
 
-        bool CircleCollider::testCollision(Transform* transform, Collider* otherCollider, Transform* otherTransform) {
+        CollisionManifold CircleCollider::testCollision(Transform* transform, Collider* otherCollider, Transform* otherTransform) {
             return otherCollider->testCollision(otherTransform, this, transform);
         }
 
-        bool CircleCollider::testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) {
-            return algo::checkCircleCircleCollision(this, transform, otherCollider, otherTransform);
+        CollisionManifold CircleCollider::testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) {
+            return algo::findCollisionFeatures(this, transform, otherCollider, otherTransform);
         }
 }

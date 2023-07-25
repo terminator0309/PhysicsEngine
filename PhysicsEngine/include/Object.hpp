@@ -9,16 +9,29 @@
 namespace pe{
 
     class Object {
+
+        // 0 inverseMass denotes inf mass obj 
+        float mass;
+        float inverseMass;
+        
         public:
         pe::Vector2f velocity;
         pe::Vector2f force;
-        float mass;
+
+        // Coefficient of restitution
+        float cor = 1.0f;
+
 
         Collider* collider;
         Transform* transform;
 
         Object();
         Object(Object&);
+
+        void setMass(float);
+        float getMass();
+        float getInverseMass();
+
         ~Object();
     };
 }

@@ -11,8 +11,8 @@ namespace pe {
 
         float getRadius();
 
-        bool testCollision(Transform* transform, Collider* otherCollider, Transform* otherTransform) override;
+        CollisionManifold testCollision(Transform* transform, Collider* otherCollider, Transform* otherTransform) override;
 
-        bool testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) override;
+        CollisionManifold testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) override;
     };
 }

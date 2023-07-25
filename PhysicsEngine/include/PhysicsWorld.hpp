@@ -4,7 +4,7 @@
 
 #include "Object.hpp"
 #include "collider/Collider.hpp"
-#include "Solver.hpp"
+#include "solver/Solver.hpp"
 
 namespace pe{
     class PhysicsWorld 
@@ -34,9 +34,11 @@ namespace pe{
 
         private:
 
-            void ResolveCollision();
+            std::vector<Collision> ResolveCollision();
 
             void Solve(std::vector<Collision>& );
+
+            //void applyImpulse(Object* , Object* , CollisionManifold* );
 
 
     };

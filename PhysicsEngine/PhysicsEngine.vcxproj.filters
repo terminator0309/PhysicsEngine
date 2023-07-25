@@ -33,9 +33,6 @@
     <ClCompile Include="src\Random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Solver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,6 +51,12 @@
     <ClCompile Include="src\ray\RaycastResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\manifold\CollisionManifold.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\solver\ImpulseSolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\collider\AABBCollider.hpp">
@@ -69,6 +72,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ray\RaycastResult.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\manifold\CollisionManifold.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\solver\ImpulseSolver.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

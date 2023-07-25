@@ -10,6 +10,7 @@
 #include "collider/LineCollider.hpp"
 #include "ray/Ray.hpp"
 #include "ray/RaycastResult.hpp"
+#include "manifold/CollisionManifold.hpp"
 
 namespace pe {
     namespace algo {
@@ -110,6 +111,13 @@ namespace pe {
         bool checkBoxAABBCollision(pe::BoxCollider* box, pe::Transform* transformB, pe::AABBCollider* aabb, pe::Transform* transformA);
 
         bool checkBoxBoxCollision(pe::BoxCollider* boxA, pe::Transform* transformA, pe::BoxCollider* boxB, pe::Transform* transformB);
+
+
+        /**************************************************************/
+        // MANIFOLDS
+        /**************************************************************/
+
+        CollisionManifold findCollisionFeatures(CircleCollider* circleA, Transform* transformA, CircleCollider* circleB, Transform* transformB);
 
 
     }
