@@ -9,7 +9,7 @@ namespace game {
         public:
         sf::CircleShape *m_circle;  
         
-        CircleEntity(pe::Vector2f , float );
+        CircleEntity(pe::Vector2f , float , pe::Vector2f);
 
         void update() override;
 

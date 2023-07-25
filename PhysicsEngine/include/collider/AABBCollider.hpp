@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Collider.hpp"
+#include <vector>
 
 namespace pe {
 
@@ -14,5 +15,6 @@ namespace pe {
 		AABBCollider(pe::Vector2f&, pe::Vector2f& );
 		pe::Vector2f getMin(Transform* );
 		pe::Vector2f getMax(Transform* );
+		std::vector<pe::Vector2f> getVertices(Transform*);
 	};
 }

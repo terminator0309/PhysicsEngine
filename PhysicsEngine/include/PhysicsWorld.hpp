@@ -10,7 +10,7 @@ namespace pe{
     class PhysicsWorld 
     {
         std::vector<Object* > m_objects;
-        pe::Vector2f m_gravity = pe::Vector2f(2.0f, 2.0f);
+        pe::Vector2f m_gravity = pe::Vector2f(0.0f, 9.8f);
         std::vector<Solver* > solvers;
 
         int m_WorldHeight;

@@ -39,7 +39,7 @@ namespace game {
 
         DynamicWorld::~DynamicWorld() {
             for (Entity* entity : entities) {
-                delete entity;
+                //delete entity;
             }
         }
 }

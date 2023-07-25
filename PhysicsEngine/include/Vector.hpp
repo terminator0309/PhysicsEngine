@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 namespace pe{
 
     // custom vector for physics engine that supports int and float
@@ -17,6 +19,17 @@ namespace pe{
             _y = copy._y;
 
             return *this;
+        }
+
+        // Assuming x at index 0 and y at index 1
+        T get(int i) {
+            if (i == 0) return _x;
+            else return _y;
+        }
+
+        void set(int i, T val) {
+            if (i == 0) _x = val;
+            else _y = val;
         }
 
         Vector operator+(const Vector& other) const {
@@ -62,8 +75,12 @@ namespace pe{
             return _x * _x + _y * _y;
         }
 
-        T dot(Vector& other) {
+        T dot(Vector other) {
             return _x * other._x + _y * other._y;
+        }
+
+        Vector normalize() {
+            return (*this / std::sqrt(this->getSquare()));
         }
     };
 

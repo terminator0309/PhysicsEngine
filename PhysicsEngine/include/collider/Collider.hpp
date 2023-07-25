@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Algo.hpp"
 #include "Transform.hpp"
 
 namespace pe {
     
-    class CircleCollider ;
+    class CircleCollider;
 
     class Collider {
         public:

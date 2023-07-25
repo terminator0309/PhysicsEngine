@@ -6,6 +6,6 @@
 
 namespace game{
     namespace util {
-        sf::Vector2f convert(pe::Vector2f& );
+        sf::Vector2f convert(pe::Vector2f );
     }
 }

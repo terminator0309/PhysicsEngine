@@ -15,6 +15,6 @@ namespace pe {
         }
 
         bool CircleCollider::testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) {
-            return algo::checkCircleCircleCollision(this->getRadius(), transform->position, otherCollider->getRadius(), otherTransform->position);
+            return algo::checkCircleCircleCollision(this, transform, otherCollider, otherTransform);
         }
 }

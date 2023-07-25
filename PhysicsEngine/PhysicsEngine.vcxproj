@@ -28,6 +28,8 @@
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\PhysicsWorld.cpp" />
     <ClCompile Include="src\Random.cpp" />
+    <ClCompile Include="src\ray\Ray.cpp" />
+    <ClCompile Include="src\ray\RaycastResult.cpp" />
     <ClCompile Include="src\Solver.cpp" />
     <ClCompile Include="src\Transform.cpp" />
   </ItemGroup>
@@ -35,6 +37,8 @@
     <ClInclude Include="include\collider\AABBCollider.hpp" />
     <ClInclude Include="include\collider\BoxCollider.hpp" />
     <ClInclude Include="include\collider\LineCollider.hpp" />
+    <ClInclude Include="include\ray\Ray.hpp" />
+    <ClInclude Include="include\ray\RaycastResult.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

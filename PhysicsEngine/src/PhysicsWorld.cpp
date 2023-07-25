@@ -41,11 +41,12 @@ namespace pe {
                 // Reset the force
                 object->force = pe::Vector2f();
 
+                // TEMP
                 // Bouncing of the boundary
-                if (object->transform->position._x < 0 or object->transform->position._x > m_WorldHeight)
+                if (object->transform->position._x - 100 <= 0 or object->transform->position._x +100 >= m_WorldWidth)
                     object->velocity._x *= -1;
 
-                if (object->transform->position._y < 0 or object->transform->position._y > m_WorldWidth)
+                if (object->transform->position._y - 100 <= 0 or object->transform->position._y +100>= m_WorldHeight)
                     object->velocity._y *= -1;
             }
 

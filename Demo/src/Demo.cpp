@@ -1,4 +1,5 @@
 #include "Demo.hpp"
+#include "TestShape.hpp"
 
 namespace game {
     struct WindowSize {
@@ -32,7 +33,11 @@ namespace game {
         game::DynamicWorld dw(WINDOW.width, WINDOW.height);
         //dw.setGravity(pe::Vector2f(0.0f));
 
-        
+        CircleEntity circle1(pe::Vector2f(100, 100), 100, pe::Vector2f(4, 5));
+        CircleEntity circle2(pe::Vector2f(400, 400), 100, pe::Vector2f(-4, -5));
+
+        dw.addEntity(&circle1);
+        dw.addEntity(&circle2);
 
         while (window.isOpen())
         {
@@ -44,7 +49,7 @@ namespace game {
 
                 if (event.type == event.MouseButtonReleased and event.mouseButton.button == sf::Mouse::Left) {
                     for (int i = 0; i < 1; i++) {
-                        dw.addEntity(new game::CircleEntity(pe::Vector2f(100.0f * (i + 1)), 25));
+                        //dw.addEntity(new game::CircleEntity(pe::Vector2f(100.0f * (i + 1)), 25));
                     }
                 /*
                     float randomRadius = pe::util::Random::getRandom(50);

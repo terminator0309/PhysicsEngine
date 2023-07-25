@@ -3,98 +3,114 @@
 #include <cmath>
 
 #include "Vector.hpp"
+#include "Transform.hpp"
+#include "collider/CircleCollider.hpp"
+#include "collider/AABBCollider.hpp"
+#include "collider/BoxCollider.hpp"
+#include "collider/LineCollider.hpp"
+#include "ray/Ray.hpp"
+#include "ray/RaycastResult.hpp"
 
 namespace pe {
     namespace algo {
         static float PIE = (float)3.141592;
         static float FLOAT_MIN = (float)(1e-6);
 
-        /// <summary>
+        /**************************************************************/
+        // HELPER functions
+        /**************************************************************/
+        
         /// Compares two floats 
         /// (https://realtimecollisiondetection.net/blog/?p=89) 
-        /// </summary>
-        /// <param name="x">First float</param>
-        /// <param name="y">Second float</param>
-        /// <param name="epsilon">Tolerance</param>
-        /// <returns>Whether given floats are within tolerance</returns>
-        bool compare(float& x, float& y, float epsilon);
-        bool compare(float& x, float& y);
+        bool compare(float x, float y, float epsilon);
+        bool compare(float x, float y);
 
-        float degreeToRadian(float degree);
-        float radianToDegree(float radian);
+        float degreeToRadian(float& degree);
+        float radianToDegree(float& radian);
 
         // returns squared distance between two points
-        float distance2(const pe::Vector2f& point_a, const pe::Vector2f& point_b);
-        float distance(const pe::Vector2f& point_a, const pe::Vector2f& point_b);
+        float distance2( pe::Vector2f& point_a,  pe::Vector2f& point_b);
+        float distance( pe::Vector2f& point_a,  pe::Vector2f& point_b);
 
-        /// <summary>
-        /// Rotates the point
-        /// </summary>
-        /// <param name="">Coordinates of the point to be rotated</param>
-        /// <param name="">Angle of rotation in anti-clockwise</param>
-        /// <param name="">(Optional argument: defaults to 0,0) Point about which rotate</param>
-        /// <returns>Rotated point</returns>
-        pe::Vector2f PointRotator(pe::Vector2f& , float , pe::Vector2f );
+        pe::Vector2f PointRotator(pe::Vector2f , float , pe::Vector2f );
 
-        /// <summary>
-        /// Checks circle to circle collision
-        /// </summary>
-        /// <param name="">radius of first circle</param>
-        /// <param name="">center of first circle</param>
-        /// <param name="">radius of second circle</param>
-        /// <param name="">center of second circle</param>
-        /// <returns>true if circles do collide; else false</returns>
-        bool checkCircleCircleCollision(float , pe::Vector2f& , float , pe::Vector2f& );
+        Vector2f getInterval(pe::AABBCollider* aabb, pe::Transform* transform, pe::Vector2f axis);
+        Vector2f getInterval(pe::BoxCollider* box, pe::Transform* transform, pe::Vector2f axis);
+
+        bool overlapOnAxis(pe::AABBCollider* aabbA, pe::Transform* transformA, pe::AABBCollider* aabbB, pe::Transform* transformB, pe::Vector2f axis);
+        bool overlapOnAxis(pe::AABBCollider* aabb, pe::Transform* transformA, pe::BoxCollider* box, pe::Transform* transformB, pe::Vector2f axis);
+        bool overlapOnAxis(pe::BoxCollider* boxA, pe::Transform* transformA, pe::BoxCollider* boxB, pe::Transform* transformB, pe::Vector2f axis);
+
 
 
         /**************************************************************/
         // POINT VS SHAPES
         /**************************************************************/
 
+        bool checkPointLineCollision(pe::Vector2f&, pe::LineCollider*);
 
-        /// <summary>
-        /// Checks whether point in on the line
-        /// </summary>
-        /// <param name="">Coordinates of point</param>
-        /// <param name="">Start coordinates of line</param>
-        /// <param name="">End coordinates of line</param>
-        /// <returns>True if point is on the line</returns>
-        bool checkPointLineCollision(pe::Vector2f&, pe::Vector2f&, pe::Vector2f&);
+        bool checkPointCircleCollision(pe::Vector2f&, pe::CircleCollider* , pe::Transform* );
 
-        /// <summary>
-        /// Checks whether point is in the circle (including on the circle)
-        /// </summary>
-        /// <param name="">Coordinates of point</param>
-        /// <param name="">Radius of circle</param>
-        /// <param name="">Center of circle</param>
-        /// <returns>True if point is in the circle</returns>
-        bool checkPointCircleCollision(pe::Vector2f&, float&, pe::Vector2f&);
+        bool checkPointAABBCollision(pe::Vector2f&, pe::AABBCollider*, pe::Transform*);
 
-        /// <summary>
-        /// Checks whether point is in the AABB box
-        /// </summary>
-        /// <param name="">Coordinates of point</param>
-        /// <param name="">Top-left(min) coordinate of AABB</param>
-        /// <param name="">Bottom-right(max) coordinate of AABB</param>
-        /// <returns>True if point is in the AABB</returns>
-        bool checkPointAABBCollision(pe::Vector2f&, pe::Vector2f&, pe::Vector2f&);
-
-        /// <summary>
-        /// Checks whether point is in the OBB box
-        /// </summary>
-        /// <param name="point">: Coordinates of point</param>
-        /// <param name="min">: Top-left(min) coordinate of box</param>
-        /// <param name="max">: Bottom-right(max) coordinate of box</param>
-        /// <param name="theta">: Angle of rotation</param>
-        /// <param name="center">: Center coordinates of the box</param>
-        /// <returns>True if point is in the box</returns>
-        bool checkPointBoxCollision(pe::Vector2f& point, pe::Vector2f& min, pe::Vector2f& max, float theta, pe::Vector2f& center);
+        bool checkPointBoxCollision(pe::Vector2f& , pe::BoxCollider* ,pe::Transform*);
 
 
         /**************************************************************/
         // LINE VS SHAPES
         /**************************************************************/
 
-        bool checkLineCircleCollision(pe::Vector2f& lineStart, pe::Vector2f& lineEnd, float& radius, pe::Vector2f& center);
+        bool checkLineCircleCollision(pe::LineCollider* ,pe::CircleCollider* , pe::Transform*);
+
+        bool checkLineAABBCollision(pe::LineCollider* , pe::AABBCollider*, pe::Transform* );
+
+        bool checkLineBoxCollision(pe::LineCollider* , pe::BoxCollider* , pe::Transform* );
+
+
+        /**************************************************************/
+        // Ray VS SHAPES
+        /**************************************************************/
+
+        bool raycastCircle(pe::CircleCollider* , pe::Transform*, Ray ray, RaycastResult result);
+
+        bool raycastAABB(pe::AABBCollider*,pe::Transform*, Ray ray, RaycastResult& result);
+
+        bool raycastBox(pe::BoxCollider*, pe::Transform*, Ray ray, RaycastResult& result);
+
+
+        /**************************************************************/
+        // Circle VS SHAPES
+        /**************************************************************/
+
+        bool checkCircleCircleCollision(pe::CircleCollider* , pe::Transform* , pe::CircleCollider* , pe::Transform*);
+
+        bool checkCircleAABBCollision(pe::CircleCollider* circle, pe::Transform* transformCircle, pe::AABBCollider* aabb, pe::Transform* transformAABB);
+
+        bool checkCircleBoxCollision(pe::CircleCollider* circle, pe::Transform* transformCircle, pe::BoxCollider* box, pe::Transform* transformBox);
+
+
+
+        /**************************************************************/
+        // AABB VS SHAPES
+        /**************************************************************/
+
+        bool checkAABBCircleCollision(pe::AABBCollider* aabb, pe::Transform* transformAABB, pe::CircleCollider* circle, pe::Transform* transformCircle);
+
+        bool checkAABBAABBCollision(pe::AABBCollider* aabbA, pe::Transform* transformA, pe::AABBCollider* aabbB, pe::Transform* transformB);
+
+        bool checkAABBBoxCollision(pe::AABBCollider* aabb, pe::Transform* transformA, pe::BoxCollider* box, pe::Transform* transformB);
+
+
+        /**************************************************************/
+        // BOX VS SHAPES
+        /**************************************************************/
+
+        bool checkBoxCircleCollision(pe::BoxCollider* box, pe::Transform* transformBox, pe::CircleCollider* circle, pe::Transform* transformCircle);
+
+        bool checkBoxAABBCollision(pe::BoxCollider* box, pe::Transform* transformB, pe::AABBCollider* aabb, pe::Transform* transformA);
+
+        bool checkBoxBoxCollision(pe::BoxCollider* boxA, pe::Transform* transformA, pe::BoxCollider* boxB, pe::Transform* transformB);
+
+
     }
 }

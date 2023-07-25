@@ -1,4 +1,5 @@
 #include "collider/BoxCollider.hpp"
+#include "Algo.hpp"
 
 namespace pe {
 
@@ -21,10 +22,10 @@ namespace pe {
 		std::vector<pe::Vector2f> vertices = { pe::Vector2f(min._x, min._y), pe::Vector2f(min._x, max._y),
 											   pe::Vector2f(max._x, min._y), pe::Vector2f(max._x, max._y) };
 
-		if(transform->rotation != 0.0f)
-			for (auto vertex : vertices) {
+		if(not algo::compare(transform->rotation, 0.0f))
+			for (auto &vertex : vertices) {
 				// TODO: rotate points about transform->position
-				// PointRotator(vertex, transform->position, transform->rotation)
+				vertex = algo::PointRotator(vertex, transform->rotation, transform->position);
 			}
 
 		return vertices;

@@ -18,4 +18,14 @@ namespace pe {
 	pe::Vector2f AABBCollider::getMax(Transform* transform) {
 		return transform->position + (m_Size * 0.5f);
 	}
+
+	std::vector<pe::Vector2f> AABBCollider::getVertices(Transform* transform) {
+		pe::Vector2f min = getMin(transform);
+		pe::Vector2f max = getMax(transform);
+
+		std::vector<pe::Vector2f> vertices = { pe::Vector2f(min._x, min._y), pe::Vector2f(min._x, max._y),
+											   pe::Vector2f(max._x, min._y), pe::Vector2f(max._x, max._y) };
+
+		return vertices;
+	}
 }
