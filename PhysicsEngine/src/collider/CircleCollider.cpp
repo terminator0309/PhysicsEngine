@@ -10,6 +10,11 @@ namespace pe {
             return radius;
         }
 
+        pe::Vector2f CircleCollider::findSupportPoint(Transform* transform, Vector2f direction) {
+            Vector2f center = transform->position;
+            return direction * radius + center;
+        }
+
         CollisionManifold CircleCollider::testCollision(Transform* transform, Collider* otherCollider, Transform* otherTransform) {
             return otherCollider->testCollision(otherTransform, this, transform);
         }

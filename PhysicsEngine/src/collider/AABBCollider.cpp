@@ -28,4 +28,22 @@ namespace pe {
 
 		return vertices;
 	}
+
+	pe::Vector2f AABBCollider::findSupportPoint(Transform* transform, pe::Vector2f direction) {
+		std::vector<pe::Vector2f> vertices = this->getVertices(transform);
+
+		float maxDotProduct = INT_MIN;
+		pe::Vector2f supportPoint = vertices[0];
+
+		for (auto& vertex : vertices) {
+			float dotProduct = vertex.dot(direction);
+
+			if (dotProduct > maxDotProduct) {
+				maxDotProduct = dotProduct;
+				supportPoint = vertex;
+			}
+		}
+
+		return supportPoint;
+	}
 }

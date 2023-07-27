@@ -10,6 +10,8 @@ namespace pe{
         T _x;
         T _y;
 
+        static Vector ORIGIN;
+
         Vector() :_x(0), _y(0) {};
         Vector(T val) : _x(val), _y(val) {};
         Vector(T x, T y) : _x(x), _y(y) {};
@@ -60,6 +62,10 @@ namespace pe{
             return Vector(_x - val, _y - val);
         }
 
+        Vector operator-() {
+            return Vector(-_x, -_y);
+        }
+
         void operator+=(const Vector& other) {
             _x += other._x;
             _y += other._y;
@@ -90,4 +96,8 @@ namespace pe{
 
     typedef Vector<int> Vector2i;
     typedef Vector<float> Vector2f;
+
+    Vector2f Vector2f::ORIGIN = Vector2f();
+    Vector2i Vector2i::ORIGIN = Vector2i();
+
 }
