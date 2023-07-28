@@ -9,6 +9,7 @@ As of now
 :white_check_mark: It has :
 - Primitive shape motion simulation
 - Primitive shape vs primitive shape collision detection
+- GJK for 2D
 - [Impulse Solver](https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf)
 
 :memo: TODO :
