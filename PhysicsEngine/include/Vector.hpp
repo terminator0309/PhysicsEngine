@@ -7,82 +7,82 @@ namespace pe{
     // custom vector for physics engine that supports int and float
     template<typename T>
     struct Vector{
-        T _x;
-        T _y;
+        T x;
+        T y;
 
         static Vector ORIGIN;
 
-        Vector() :_x(0), _y(0) {};
-        Vector(T val) : _x(val), _y(val) {};
-        Vector(T x, T y) : _x(x), _y(y) {};
+        Vector() :x(0), y(0) {};
+        Vector(T val) : x(val), y(val) {};
+        Vector(T x, T y) : x(x), y(y) {};
 
         Vector& operator=(const Vector& copy) {
-            _x = copy._x;
-            _y = copy._y;
+            x = copy.x;
+            y = copy.y;
 
             return *this;
         }
 
         // Assuming x at index 0 and y at index 1
         T get(int i) {
-            if (i == 0) return _x;
-            else return _y;
+            if (i == 0) return x;
+            else return y;
         }
 
         void set(int i, T val) {
-            if (i == 0) _x = val;
-            else _y = val;
+            if (i == 0) x = val;
+            else y = val;
         }
 
         Vector operator+(const Vector& other) const {
-            return Vector(_x + other._x, _y + other._y);
+            return Vector(x + other.x, y + other.y);
         }
 
         Vector operator-(const Vector& other) const {
-            return Vector(_x - other._x, _y - other._y);
+            return Vector(x - other.x, y - other.y);
         }
 
         Vector operator*(const Vector& other) const {
-            return Vector(_x * other._x, _y * other._y);
+            return Vector(x * other.x, y * other.y);
         }
 
         Vector operator/(const Vector& other) const {
-            return Vector(_x / other._x, _y / other._y);
+            return Vector(x / other.x, y / other.y);
         }
 
         Vector operator*(const T& val) {
-            return Vector(_x * val, _y * val);
+            return Vector(x * val, y * val);
         }
 
         Vector operator/(const T& val) {
-            return Vector(_x / val, _y / val);
+            return Vector(x / val, y / val);
         }
 
         Vector operator-(const T& val) {
-            return Vector(_x - val, _y - val);
+            return Vector(x - val, y - val);
         }
 
         Vector operator-() {
-            return Vector(-_x, -_y);
+            return Vector(-x, -y);
         }
 
         void operator+=(const Vector& other) {
-            _x += other._x;
-            _y += other._y;
+            x += other.x;
+            y += other.y;
         }
 
         bool operator==(const Vector& other) const {
-            return _x == other._x and _y == other._y;
+            return x == other.x and y == other.y;
         }
 
         bool operator==(Vector& other);
 
         T getSquare() {
-            return _x * _x + _y * _y;
+            return x * x + y * y;
         }
 
         T dot(Vector other) {
-            return _x * other._x + _y * other._y;
+            return x * other.x + y * other.y;
         }
 
         Vector normalize() {

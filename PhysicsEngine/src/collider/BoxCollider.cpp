@@ -19,8 +19,8 @@ namespace pe {
 		pe::Vector2f min = getMin(transform);
 		pe::Vector2f max = getMax(transform);
 
-		std::vector<pe::Vector2f> vertices = { pe::Vector2f(min._x, min._y), pe::Vector2f(min._x, max._y),
-											   pe::Vector2f(max._x, min._y), pe::Vector2f(max._x, max._y) };
+		std::vector<pe::Vector2f> vertices = { pe::Vector2f(min.x, min.y), pe::Vector2f(min.x, max.y),
+											   pe::Vector2f(max.x, min.y), pe::Vector2f(max.x, max.y) };
 
 		if(not algo::compare(transform->rotation, 0.0f))
 			for (auto &vertex : vertices) {

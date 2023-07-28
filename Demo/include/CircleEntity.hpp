@@ -11,6 +11,8 @@ namespace game {
         
         CircleEntity(pe::Vector2f , float , pe::Vector2f);
 
+        void setColor(int) override;
+
         void update() override;
 
         sf::CircleShape* getShape();

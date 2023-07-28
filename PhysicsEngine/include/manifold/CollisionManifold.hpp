@@ -25,5 +25,6 @@ namespace pe {
 		bool getIsColliding();
 		
 		void addCollisionPoint(pe::Vector2f);
+
 	};
 }

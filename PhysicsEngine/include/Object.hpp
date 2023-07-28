@@ -21,6 +21,9 @@ namespace pe{
         // Coefficient of restitution
         float cor = 1.0f;
 
+        // TEMP
+        int color = 0;
+
 
         Collider* collider;
         Transform* transform;

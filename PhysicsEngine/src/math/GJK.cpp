@@ -62,45 +62,9 @@
 * 
 */
 
-#include "collider/Collider.hpp"
-
-#include <array>
+#include "math/GJK.hpp"
 
 namespace pe {
-
-	class Simplex {
-	private:
-		std::array<Vector2f, 3> m_points;
-		int m_size;
-
-	public:
-		Simplex() 
-			: m_points({ 0,0,0 })
-			, m_size(0) 
-		{};
-
-		Simplex& operator=(std::initializer_list<Vector2f> list) {
-			for (auto v = list.begin(); v != list.end(); v++)
-				m_points[std::distance(list.begin(), v)] = *v;
-
-			m_size = list.size();
-
-			return *this;
-		}
-
-		void push_front(Vector2f point) {
-			m_points = { point, m_points[0], m_points[1] };
-			m_size = std::min(m_size + 1, 3);
-		}
-
-		Vector2f& operator[](int i) {
-			return m_points[i]; 
-		}
-
-		int size() {
-			return m_size;
-		}
-	};
 
 // Calculates (ab X ac) X ab
 Vector2f getPerpendicularVectorTowardsC(Vector2f a, Vector2f b, Vector2f c) {
@@ -109,10 +73,10 @@ Vector2f getPerpendicularVectorTowardsC(Vector2f a, Vector2f b, Vector2f c) {
 	auto ab = b - a;
 	auto ac = c - a;
 
-	float abXac = (ab._x * ac._y - ab._y * ac._x);
+	float abXac = (ab.x * ac.y - ab.y * ac.x);
 
-	return Vector2f(-abXac * ab._y,
-					 abXac * ab._x);
+	return Vector2f(-abXac * ab.y,
+					 abXac * ab.x);
 }
 
 bool SameDirection(Vector2f& direction, Vector2f& a) {
@@ -149,6 +113,7 @@ bool Triangle(Simplex& points, Vector2f& direction) {
 
 	Vector2f ab = b - a;
 	Vector2f ac = c - a;
+	Vector2f ao = -a;
 
 	// Normal to ab side pointing outside triangle
 	Vector2f normalAB = -getPerpendicularVectorTowardsC(a, b, c);
@@ -156,20 +121,21 @@ bool Triangle(Simplex& points, Vector2f& direction) {
 	// Normal to ac side pointing outside triangle
 	Vector2f normalAC = -getPerpendicularVectorTowardsC(a, c, b);
 
-	if (SameDirection(normalAB, Vector2f::ORIGIN))
+	if (SameDirection(normalAB, ao))
 		return Line(points = { a, b }, direction = normalAB);
-	if (SameDirection(normalAC, Vector2f::ORIGIN))
+
+	if (SameDirection(normalAC, ao))
 		return Line(points = { a, c }, direction = normalAC);
 		
 	return true;
 }
 
-Vector2f minkiSupportPoint(Collider* colliderA, Transform* transformA, Collider* colliderB, Transform* transformB, Vector2f direction) {
-	return colliderA->findSupportPoint(transformA, direction)
-		   - colliderB->findSupportPoint(transformB, -direction);
+std::array<Vector2f, 2> minkiSupportPoint(Collider* colliderA, Transform* transformA, Collider* colliderB, Transform* transformB, Vector2f direction) {
+	return { colliderA->findSupportPoint(transformA, direction)
+		   ,colliderB->findSupportPoint(transformB, -direction) };
 }
 
-bool NextSimples(Simplex& points, Vector2f& direction) {
+bool NextSimplex(Simplex& points, Vector2f& direction) {
 	// Line
 	if (points.size() == 2)
 		return Line(points, direction);
@@ -179,30 +145,35 @@ bool NextSimples(Simplex& points, Vector2f& direction) {
 		return Triangle(points, direction);
 }
 
-bool GJK(Collider* colliderA, Transform* transformA, Collider* colliderB, Transform* transformB) {
-
+CollisionManifold GJK(Collider* colliderA, Transform* transformA, Collider* colliderB, Transform* transformB) {
+	
 	// Initial direction
 	Vector2f direction(1, 0);
 
-	Vector2f supportPoint = minkiSupportPoint(colliderA, transformA, colliderB, transformB, direction);
-	
+	auto supportPoints = minkiSupportPoint(colliderA, transformA, colliderB, transformB, direction);
+	auto supportPoint = supportPoints[0] - supportPoints[1];
+
 	Simplex points;
 	points.push_front(supportPoint);
 
 	direction = -supportPoint;
 
 	while (true) {
-		supportPoint = minkiSupportPoint(colliderA, transformA, colliderB, transformB, direction);
+		direction = direction.normalize();
+		supportPoints = minkiSupportPoint(colliderA, transformA, colliderB, transformB, direction);
+		supportPoint = supportPoints[0] - supportPoints[1];
 
 		// Point doesn't passed the origin
 		// No collision
 		if (supportPoint.dot(direction) <= 0)
-			return false;
+		{
+			return CollisionManifold();
+		}
 
 		points.push_front(supportPoint);
 
-		if (NextSimples(points, direction))
-			return true;
+		if (NextSimplex(points, direction))
+			return CollisionManifold(Vector2f(), 0);
 	}	
 	
 }

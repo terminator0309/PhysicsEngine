@@ -1,5 +1,6 @@
 #include "Demo.hpp"
 #include "TestShape.hpp"
+#include "RectEntity.hpp"
 
 namespace game {
     struct WindowSize {
@@ -29,15 +30,20 @@ namespace game {
         sf::RenderWindow window(sf::VideoMode(WINDOW.width, WINDOW.height), "DEMO", sf::Style::Default, this->getSettings());
 
         pe::util::Random::init();
-
+        sf::RectangleShape shape({ 200, 200 });
+        
         game::DynamicWorld dw(WINDOW.width, WINDOW.height);
-        //dw.setGravity(pe::Vector2f(0.0f));
+        dw.setGravity(pe::Vector2f(0.0f));
 
-        CircleEntity circle1(pe::Vector2f(100, 100), 100, pe::Vector2f(4, 5));
+        CircleEntity circle1(pe::Vector2f(380, 200), 100, pe::Vector2f(4, 5));
         CircleEntity circle2(pe::Vector2f(400, 110), 100, pe::Vector2f(-4, -5));
+        RectEntity rect(200, 200, sf::Vector2f(600,200), sf::Vector2f(-1, 5));
 
         dw.addEntity(&circle1);
         dw.addEntity(&circle2);
+        dw.addEntity(&rect);
+
+        bool play = true;
 
         while (window.isOpen())
         {
@@ -47,27 +53,17 @@ namespace game {
                 if (isWindowClosed(event))
                     handleWindowClose(window);
 
-                /*
-                if (event.type == event.MouseButtonReleased and event.mouseButton.button == sf::Mouse::Left) {
-                    for (int i = 0; i < 1; i++) {
-                        //dw.addEntity(new game::CircleEntity(pe::Vector2f(100.0f * (i + 1)), 25));
-                    }
-                    float randomRadius = pe::util::Random::getRandom(50);
-
-                    float randomXPosition = pe::util::Random::getRandom(randomRadius, WINDOW.width - randomRadius);
-                    float randomYPosition = pe::util::Random::getRandom(randomRadius, WINDOW.height - randomRadius);
-
-                    pe::Vector2f circleCenter = pe::Vector2f(randomXPosition, randomYPosition);
-
-                    dw.addEntity(new game::CircleEntity(circleCenter, randomRadius));
-                }
-                */
+                if (event.type == event.KeyPressed and sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+                    play = !play;
+     
             }
 
 
             window.clear();
 
-            dw.update(0.02f);
+            if(play)
+                dw.update(0.01f);
+
             dw.draw(window);
 
             window.display();

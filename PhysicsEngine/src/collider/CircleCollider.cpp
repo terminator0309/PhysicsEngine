@@ -1,5 +1,6 @@
 #include "Algo.hpp"
 #include "collider/CircleCollider.hpp"
+#include "math/GJK.hpp"
 
 namespace pe {
         CircleCollider::CircleCollider(float r) {
@@ -20,6 +21,10 @@ namespace pe {
         }
 
         CollisionManifold CircleCollider::testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) {
-            return algo::findCollisionFeatures(this, transform, otherCollider, otherTransform);
+            return pe::GJK(this, transform, otherCollider, otherTransform);
+        }
+
+        std::string CircleCollider::getName() {
+            return "Circle";
         }
 }

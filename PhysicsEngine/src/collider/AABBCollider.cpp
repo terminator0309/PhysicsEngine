@@ -1,4 +1,5 @@
 #include "collider/AABBCollider.hpp"
+#include "math/GJK.hpp"
 
 namespace pe {
 
@@ -9,6 +10,10 @@ namespace pe {
 	/// <param name="max">Bottom-right coordinates of AABB box</param>
 	AABBCollider::AABBCollider(pe::Vector2f& min, pe::Vector2f& max) {
 		m_Size = max - min;
+	}
+
+	AABBCollider::AABBCollider(float width, float height) {
+		m_Size = Vector2f(width, height);
 	}
 
 	pe::Vector2f AABBCollider::getMin(Transform* transform) {
@@ -23,8 +28,8 @@ namespace pe {
 		pe::Vector2f min = getMin(transform);
 		pe::Vector2f max = getMax(transform);
 
-		std::vector<pe::Vector2f> vertices = { pe::Vector2f(min._x, min._y), pe::Vector2f(min._x, max._y),
-											   pe::Vector2f(max._x, min._y), pe::Vector2f(max._x, max._y) };
+		std::vector<pe::Vector2f> vertices = { pe::Vector2f(min.x, min.y), pe::Vector2f(min.x, max.y),
+											   pe::Vector2f(max.x, min.y), pe::Vector2f(max.x, max.y) };
 
 		return vertices;
 	}
@@ -45,5 +50,17 @@ namespace pe {
 		}
 
 		return supportPoint;
+	}
+
+	CollisionManifold AABBCollider::testCollision(Transform* transform, Collider* otherCollider, Transform* otherTransform) {
+		return otherCollider->testCollision(otherTransform, this, transform);
+	}
+
+	CollisionManifold AABBCollider::testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) {
+		return pe::GJK(this, transform, (Collider* )otherCollider, otherTransform);
+	}
+
+	std::string AABBCollider::getName() {
+		return "AABB";
 	}
 }

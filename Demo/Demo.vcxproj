@@ -146,6 +146,7 @@
     <ClCompile Include="src\Demo.cpp" />
     <ClCompile Include="src\DynamicWorld.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\RectEntity.cpp" />
     <ClCompile Include="src\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +155,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\RectEntity.hpp" />
     <ClInclude Include="include\TestShape.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

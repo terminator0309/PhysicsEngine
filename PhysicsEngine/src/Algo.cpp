@@ -7,7 +7,7 @@
 namespace pe {
 
     bool Vector2f::operator==(Vector2f&  other) {
-        return algo::compare(this->_x, other._x) and pe::algo::compare(_y, other._y);
+        return algo::compare(this->x, other.x) and pe::algo::compare(y, other.y);
     }
 
     namespace algo {
@@ -43,8 +43,8 @@ namespace pe {
             float cos = std::cos(angleRadian);
             float sin = std::sin(angleRadian);
 
-            float rotatedX = shiftedPoint._x * cos - shiftedPoint._y * sin;
-            float rotatedY = shiftedPoint._x * sin + shiftedPoint._y * cos;
+            float rotatedX = shiftedPoint.x * cos - shiftedPoint.y * sin;
+            float rotatedY = shiftedPoint.x * sin + shiftedPoint.y * cos;
 
             return pe::Vector2f(rotatedX, rotatedY) + center;
         }
@@ -57,17 +57,17 @@ namespace pe {
             auto lineStart = line->getStart();
             auto lineEnd = line->getEnd();
 
-            float dy = (lineEnd._y - lineStart._y);
-            float dx = (lineEnd._x - lineStart._x);
+            float dy = (lineEnd.y - lineStart.y);
+            float dx = (lineEnd.x - lineStart.x);
 
             // Case where slope is inf and line is vertical 
             if (dx == 0.0f)
-                return compare(point._x, lineStart._x);
+                return compare(point.x, lineStart.x);
 
             float slope = dy / dx;
-            float yIntercept = (lineStart._y * lineEnd._x) - (lineEnd._y * lineStart._x);
+            float yIntercept = (lineStart.y * lineEnd.x) - (lineEnd.y * lineStart.x);
 
-            return point._y == slope * point._x + yIntercept;
+            return point.y == slope * point.x + yIntercept;
         }
 
         bool checkPointCircleCollision(pe::Vector2f&  point, pe::CircleCollider* circle, pe::Transform* transform) {
@@ -81,8 +81,8 @@ namespace pe {
             auto min = aabb->getMin(transform);
             auto max = aabb->getMax(transform);
 
-            return min._x <= point._x and point._x <= max._x and 
-                   min._y <= point._y and point._y <= max._y;
+            return min.x <= point.x and point.x <= max.x and 
+                   min.y <= point.y and point.y <= max.y;
         }
 
         bool checkPointBoxCollision(pe::Vector2f& point, pe::BoxCollider* box, pe::Transform* transform) {
@@ -94,8 +94,8 @@ namespace pe {
 
             pe::Vector2f rotatedPoint = PointRotator(point, -theta, center);
 
-            return min._x <= rotatedPoint._x and rotatedPoint._x <= max._x and
-                   min._y <= rotatedPoint._y and rotatedPoint._y <= max._y;;
+            return min.x <= rotatedPoint.x and rotatedPoint.x <= max.x and
+                   min.y <= rotatedPoint.y and rotatedPoint.y <= max.y;;
         }
 
         bool checkLineCircleCollision(pe::LineCollider* line, pe::CircleCollider* circle, pe::Transform* transform) {
@@ -140,14 +140,14 @@ namespace pe {
             pe::Vector2f unitVector = (lineEnd - lineStart).normalize();
 
             // Inversing unit vector
-            unitVector._x = (unitVector._x != 0) ? 1.0f / unitVector._x : FLOAT_MIN;
-            unitVector._y = (unitVector._y != 0) ? 1.0f / unitVector._y : FLOAT_MIN;
+            unitVector.x = (unitVector.x != 0) ? 1.0f / unitVector.x : FLOAT_MIN;
+            unitVector.y = (unitVector.y != 0) ? 1.0f / unitVector.y : FLOAT_MIN;
 
             min = (min - lineStart) * unitVector;
             max = (max - lineStart) * unitVector;
 
-            float tmin = std::max(std::min(min._x, max._x), std::min(min._y, max._y));
-            float tmax = std::min(std::max(min._x, max._x), std::max(min._y, max._y));
+            float tmin = std::max(std::min(min.x, max.x), std::min(min.y, max.y));
+            float tmax = std::min(std::max(min.x, max.x), std::max(min.y, max.y));
 
             if (tmax < 0 or tmin > tmax)
                 return false;
@@ -217,14 +217,14 @@ namespace pe {
             pe::Vector2f unitVector = ray.getDirection();
 
             // Inversing unit vector
-            unitVector._x = (unitVector._x != 0) ? 1.0f / unitVector._x : FLOAT_MIN;
-            unitVector._y = (unitVector._y != 0) ? 1.0f / unitVector._y : FLOAT_MIN;
+            unitVector.x = (unitVector.x != 0) ? 1.0f / unitVector.x : FLOAT_MIN;
+            unitVector.y = (unitVector.y != 0) ? 1.0f / unitVector.y : FLOAT_MIN;
 
             min = (min - ray.getOrigin()) * unitVector;
             max = (max - ray.getOrigin()) * unitVector;
 
-            float tmin = std::max(std::min(min._x, max._x), std::min(min._y, max._y));
-            float tmax = std::min(std::max(min._x, max._x), std::max(min._y, max._y));
+            float tmin = std::max(std::min(min.x, max.x), std::min(min.y, max.y));
+            float tmax = std::min(std::max(min.x, max.x), std::max(min.y, max.y));
 
             if (tmax < 0 or tmin > tmax)
                 return false;
@@ -303,15 +303,15 @@ namespace pe {
 
             pe::Vector2f closestPointToCircle = center;
 
-            if (closestPointToCircle._x < min._x)
-                closestPointToCircle._x = min._x;
-            else if(closestPointToCircle._x > max._x)
-                closestPointToCircle._x = max._x;
+            if (closestPointToCircle.x < min.x)
+                closestPointToCircle.x = min.x;
+            else if(closestPointToCircle.x > max.x)
+                closestPointToCircle.x = max.x;
 
-            if (closestPointToCircle._y < min._y)
-                closestPointToCircle._y = min._y;
-            else if (closestPointToCircle._x > max._y)
-                closestPointToCircle._y = max._y;
+            if (closestPointToCircle.y < min.y)
+                closestPointToCircle.y = min.y;
+            else if (closestPointToCircle.x > max.y)
+                closestPointToCircle.y = max.y;
 
             pe::Vector2f circleToAABB = center - closestPointToCircle;
             return circleToAABB.getSquare() <= radius * radius;
@@ -341,15 +341,15 @@ namespace pe {
 
             pe::Vector2f closestPointToCircle = center;
 
-            if (closestPointToCircle._x < min._x)
-                closestPointToCircle._x = min._x;
-            else if (closestPointToCircle._x > max._x)
-                closestPointToCircle._x = max._x;
+            if (closestPointToCircle.x < min.x)
+                closestPointToCircle.x = min.x;
+            else if (closestPointToCircle.x > max.x)
+                closestPointToCircle.x = max.x;
 
-            if (closestPointToCircle._y < min._y)
-                closestPointToCircle._y = min._y;
-            else if (closestPointToCircle._x > max._y)
-                closestPointToCircle._y = max._y;
+            if (closestPointToCircle.y < min.y)
+                closestPointToCircle.y = min.y;
+            else if (closestPointToCircle.x > max.y)
+                closestPointToCircle.y = max.y;
 
             pe::Vector2f circleToBox = center - closestPointToCircle;
             return circleToBox.getSquare() <= radius * radius;
@@ -403,21 +403,21 @@ namespace pe {
             pe::Vector2f interval_a = getInterval(aabbA, transformA, axis);
             pe::Vector2f interval_b = getInterval(aabbB, transformB, axis);
 
-            return interval_b._x <= interval_a._y and interval_a._x <= interval_b._y;
+            return interval_b.x <= interval_a.y and interval_a.x <= interval_b.y;
         }
 
         bool overlapOnAxis(pe::AABBCollider* aabb, pe::Transform* transformA, pe::BoxCollider* box, pe::Transform* transformB, pe::Vector2f axis) {
             pe::Vector2f interval_a = getInterval(aabb, transformA, axis);
             pe::Vector2f interval_b = getInterval(box, transformB, axis);
 
-            return interval_b._x <= interval_a._y and interval_a._x <= interval_b._y;
+            return interval_b.x <= interval_a.y and interval_a.x <= interval_b.y;
         }
 
         bool overlapOnAxis(pe::BoxCollider* boxA, pe::Transform* transformA, pe::BoxCollider* boxB, pe::Transform* transformB, pe::Vector2f axis) {
             pe::Vector2f interval_a = getInterval(boxA, transformA, axis);
             pe::Vector2f interval_b = getInterval(boxB, transformB, axis);
 
-            return interval_b._x <= interval_a._y and interval_a._x <= interval_b._y;
+            return interval_b.x <= interval_a.y and interval_a.x <= interval_b.y;
         }
 
         Vector2f getInterval(pe::AABBCollider* aabb, pe::Transform* transform, pe::Vector2f axis) {
@@ -427,15 +427,15 @@ namespace pe {
 
             // Initializing
             // Assuming x to be the min and y to be the max
-            result._x = result._y = vertices[0].dot(axis);
+            result.x = result.y = vertices[0].dot(axis);
 
             for (auto &vertex : vertices) {
                 float project = vertex.dot(axis);
 
-                if (project < result._x)
-                    result._x = project;
-                if (project > result._y)
-                    result._y = project;
+                if (project < result.x)
+                    result.x = project;
+                if (project > result.y)
+                    result.y = project;
             }
 
             return result;
@@ -448,15 +448,15 @@ namespace pe {
 
             // Initializing
             // Assuming x to be the min and y to be the max
-            result._x = result._y = vertices[0].dot(axis);
+            result.x = result.y = vertices[0].dot(axis);
 
             for (auto& vertex : vertices) {
                 float project = vertex.dot(axis);
 
-                if (project < result._x)
-                    result._x = project;
-                if (project > result._y)
-                    result._y = project;
+                if (project < result.x)
+                    result.x = project;
+                if (project > result.y)
+                    result.y = project;
             }
 
             return result;

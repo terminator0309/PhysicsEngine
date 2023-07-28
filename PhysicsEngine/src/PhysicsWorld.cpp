@@ -2,6 +2,8 @@
 #include "manifold/CollisionManifold.hpp"
 #include "solver/ImpulseSolver.hpp"
 
+#include <set>
+
 namespace pe {
 
         PhysicsWorld::PhysicsWorld() {
@@ -45,21 +47,22 @@ namespace pe {
 
                 // TEMP
                 // Bouncing of the boundary
-                if (object->transform->position._x - 100 <= 0 or object->transform->position._x +100 >= m_WorldWidth)
-                    object->velocity._x *= -object->cor;
+                if (object->transform->position.x - 100 <= 0 or object->transform->position.x +100 >= m_WorldWidth)
+                    object->velocity.x *= -object->cor;
 
-                if (object->transform->position._y - 100 <= 0 or object->transform->position._y + 100 >= m_WorldHeight)
-                    object->velocity._y *= -object->cor;
+                if (object->transform->position.y - 100 <= 0 or object->transform->position.y + 100 >= m_WorldHeight)
+                    object->velocity.y *= -object->cor;
                 
             }
 
             auto collisions = ResolveCollision();
-            Solve(collisions);
+            //Solve(collisions);
 
         }
 
         std::vector<Collision> PhysicsWorld::ResolveCollision() {
             std::vector<Collision> collisions;
+            std::set<pe::Object* > temp;
 
             for (Object* a : m_objects) {
                 for (Object* b : m_objects) {
@@ -68,9 +71,21 @@ namespace pe {
 
                     CollisionManifold manifold = a->collider->testCollision(a->transform, b->collider, b->transform);
 
-                    if (manifold.getIsColliding()) 
-                        collisions.emplace_back(a, b, manifold);
+
+                    if (manifold.getIsColliding()) {
+                        //collisions.emplace_back(a, b, manifold);
+                        //std::cout << a->collider->getName() << " : " << b->collider->getName() << std::endl;
+                        temp.insert(a);
+                        temp.insert(b);
+                    }
                 }
+            }
+
+            for (Object* obj : m_objects) {
+                if (temp.find(obj) == temp.end())
+                    obj->color = 0;
+                else
+                    obj->color = 1;
             }
 
             return collisions;
