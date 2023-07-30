@@ -13,15 +13,7 @@ namespace game {
 		m_rect->setPosition(position);
 	}
 
-	void RectEntity::setColor(int color) {
-		if (color == 0)
-			m_rect->setFillColor(sf::Color::Cyan);
-		else
-			m_rect->setFillColor(sf::Color::Red);
-	}
-
 	void RectEntity::update() {
-		this->setColor(m_object->color);
 		auto position = m_object->transform->position;
 		m_rect->setPosition(sf::Vector2f(position.x - m_rect->getSize().x/2, position.y - m_rect->getSize().y/2));
 	}

@@ -9,8 +9,6 @@ namespace game {
 
 		RectEntity(float, float, sf::Vector2f, sf::Vector2f);
 
-		void setColor(int) override;
-
 		void update() override;
 
 		sf::RectangleShape* getShape();

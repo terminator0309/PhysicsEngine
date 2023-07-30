@@ -62,7 +62,6 @@ namespace pe {
 
         std::vector<Collision> PhysicsWorld::ResolveCollision() {
             std::vector<Collision> collisions;
-            std::set<pe::Object* > temp;
 
             for (Object* a : m_objects) {
                 for (Object* b : m_objects) {
@@ -73,17 +72,8 @@ namespace pe {
 
                     if (manifold.getIsColliding()) {
                         collisions.emplace_back(a, b, manifold);
-                        temp.insert(a);
-                        temp.insert(b);
                     }
                 }
-            }
-
-            for (Object* obj : m_objects) {
-                if (temp.find(obj) == temp.end())
-                    obj->color = 0;
-                else
-                    obj->color = 1;
             }
 
             return collisions;

@@ -1,5 +1,4 @@
 #include "Demo.hpp"
-#include "TestShape.hpp"
 #include "RectEntity.hpp"
 
 namespace game {

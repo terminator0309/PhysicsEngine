@@ -14,15 +14,8 @@ namespace game {
             m_circle->setFillColor(sf::Color::Cyan);
         }
 
-        void CircleEntity::setColor(int color) {
-            if (color == 0)
-                m_circle->setFillColor(sf::Color::Cyan);
-            else
-                m_circle->setFillColor(sf::Color::Red);
-        }
 
         void  CircleEntity::update() {
-            this->setColor(m_object->color);
             m_circle->setPosition(util::convert(m_object->transform->position-m_circle->getRadius()));
         }
 
