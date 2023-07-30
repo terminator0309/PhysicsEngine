@@ -1,5 +1,6 @@
 #include "collider/AABBCollider.hpp"
 #include "math/GJK.hpp"
+#include "collider/CircleCollider.hpp"
 
 namespace pe {
 
@@ -57,7 +58,11 @@ namespace pe {
 	}
 
 	CollisionManifold AABBCollider::testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) {
-		return pe::GJK(this, transform, (Collider* )otherCollider, otherTransform);
+		return otherCollider->testCollision(otherTransform, this, transform);
+	}
+
+	CollisionManifold AABBCollider::testCollision(Transform* transform, AABBCollider* otherCollider, Transform* otherTransform) {
+		return pe::GJK(this, transform, otherCollider, otherTransform);
 	}
 
 	std::string AABBCollider::getName() {

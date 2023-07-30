@@ -26,15 +26,15 @@ namespace pe {
         auto relativeNormal = m->getNormal().normalize();
 
         // Moving away from each other, do nothing
-        if (relativeVelocity.dot(relativeNormal) > 0.0f)
+        if (relativeVelocity.dot(b->transform->position - a->transform->position) > 0.0f)
             return;
 
         float minCor = std::min(corA, corB);
         float numerator = -(1 + minCor) * relativeVelocity.dot(relativeNormal);
         float j = numerator / inverseMassSum;
 
-        if (m->getCollisionPoints().size() > 0 and j != 0.0f)
-            j /= (float)m->getCollisionPoints().size();
+        //if (m->getCollisionPoints().size() > 0 and j != 0.0f)
+            //j /= (float)m->getCollisionPoints().size();
 
         auto impulse = relativeNormal * j;
 

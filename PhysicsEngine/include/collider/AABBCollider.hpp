@@ -23,6 +23,6 @@ namespace pe {
 		pe::Vector2f findSupportPoint(Transform*, pe::Vector2f) override;
 		CollisionManifold testCollision(Transform*, Collider*, Transform*) override;
 		CollisionManifold testCollision(Transform*, CircleCollider*, Transform*) override;
-
+		CollisionManifold testCollision(Transform*, AABBCollider*, Transform*) override;
 	};
 }

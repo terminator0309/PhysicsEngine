@@ -35,13 +35,13 @@ namespace game {
         game::DynamicWorld dw(WINDOW.width, WINDOW.height);
         dw.setGravity(pe::Vector2f(0.0f));
 
-        CircleEntity circle1(pe::Vector2f(380, 200), 100, pe::Vector2f(4, 5));
-        CircleEntity circle2(pe::Vector2f(400, 110), 100, pe::Vector2f(-4, -5));
-        RectEntity rect(200, 200, sf::Vector2f(600,200), sf::Vector2f(-1, 5));
+        CircleEntity circle1(pe::Vector2f(380, 200), 100, pe::Vector2f(4, 7));
+        CircleEntity circle2(pe::Vector2f(400, 410), 100, pe::Vector2f(-4, -5));
+        RectEntity rect(200, 200, sf::Vector2f(600,200), sf::Vector2f(-4, 5));
 
         dw.addEntity(&circle1);
-        dw.addEntity(&circle2);
         dw.addEntity(&rect);
+        dw.addEntity(&circle2);
 
         bool play = true;
 
@@ -62,7 +62,7 @@ namespace game {
             window.clear();
 
             if(play)
-                dw.update(0.01f);
+                dw.update(0.015f);
 
             dw.draw(window);
 

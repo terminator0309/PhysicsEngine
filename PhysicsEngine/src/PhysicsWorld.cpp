@@ -56,7 +56,7 @@ namespace pe {
             }
 
             auto collisions = ResolveCollision();
-            //Solve(collisions);
+            Solve(collisions);
 
         }
 
@@ -71,10 +71,8 @@ namespace pe {
 
                     CollisionManifold manifold = a->collider->testCollision(a->transform, b->collider, b->transform);
 
-
                     if (manifold.getIsColliding()) {
-                        //collisions.emplace_back(a, b, manifold);
-                        //std::cout << a->collider->getName() << " : " << b->collider->getName() << std::endl;
+                        collisions.emplace_back(a, b, manifold);
                         temp.insert(a);
                         temp.insert(b);
                     }

@@ -63,6 +63,7 @@
 */
 
 #include "math/GJK.hpp"
+#include <iostream>
 
 namespace pe {
 
@@ -130,9 +131,9 @@ bool Triangle(Simplex& points, Vector2f& direction) {
 	return true;
 }
 
-std::array<Vector2f, 2> minkiSupportPoint(Collider* colliderA, Transform* transformA, Collider* colliderB, Transform* transformB, Vector2f direction) {
-	return { colliderA->findSupportPoint(transformA, direction)
-		   ,colliderB->findSupportPoint(transformB, -direction) };
+Vector2f minkiSupportPoint(Collider* colliderA, Transform* transformA, Collider* colliderB, Transform* transformB, Vector2f direction) {
+	return colliderA->findSupportPoint(transformA, direction) -
+		    colliderB->findSupportPoint(transformB, -direction) ;
 }
 
 bool NextSimplex(Simplex& points, Vector2f& direction) {
@@ -145,13 +146,65 @@ bool NextSimplex(Simplex& points, Vector2f& direction) {
 		return Triangle(points, direction);
 }
 
-CollisionManifold GJK(Collider* colliderA, Transform* transformA, Collider* colliderB, Transform* transformB) {
+// Expanding Polytope Algorithm
+// \returns normal of the collision
+Vector2f EPA(Simplex& simplex, Collider* colliderA, Transform* transformA,
+	Collider* colliderB, Transform* transformB) {
+
+	int minIndex = 0;
+	float minDistance = FLT_MAX;
+	Vector2f minNormal;
+	std::vector<Vector2f> simplexPoints;
+
+	// copying simplex points
+	for (int i = 0; i < simplex.size(); i++)
+		simplexPoints.push_back(simplex[i]);
+
+
+	while (minDistance == FLT_MAX) {
+		for (size_t i = 0; i < simplexPoints.size(); i++) {
+			int j = (i + 1) % simplexPoints.size();
+
+			Vector2f vertexI = simplexPoints[i];
+			Vector2f vertexJ = simplexPoints[j];
+
+			auto ij = vertexJ - vertexI;
+			Vector2f normal = Vector2f(ij.y, -ij.x).normalize();
+			float distance = normal.dot(vertexI);
+
+			if (distance < 0) {
+				distance *= -1;
+				normal = normal * -1;
+			}
+
+			if (distance < minDistance) {
+				minDistance = distance;
+				minNormal = normal;
+				minIndex = j;
+			}
+		}
+
+		auto supportPoint = minkiSupportPoint(colliderA, transformA, colliderB, transformB, minNormal);
+		float sDistance = minNormal.dot(supportPoint);
+
+		// If we found a new support point in the direction of normal
+		// We add it to the list and try again
+		if (std::abs(sDistance - minDistance) > 0.001) {
+			minDistance = FLT_MAX;
+			simplexPoints.insert(simplexPoints.begin() + minIndex, supportPoint);
+		}
+	}
+
+	return minNormal * (minDistance + 0.001f);
+}
+
+CollisionManifold GJK(Collider* colliderA, Transform* transformA, 
+					  Collider* colliderB, Transform* transformB) {
 	
 	// Initial direction
 	Vector2f direction(1, 0);
 
-	auto supportPoints = minkiSupportPoint(colliderA, transformA, colliderB, transformB, direction);
-	auto supportPoint = supportPoints[0] - supportPoints[1];
+	auto supportPoint = minkiSupportPoint(colliderA, transformA, colliderB, transformB, direction);
 
 	Simplex points;
 	points.push_front(supportPoint);
@@ -160,8 +213,7 @@ CollisionManifold GJK(Collider* colliderA, Transform* transformA, Collider* coll
 
 	while (true) {
 		direction = direction.normalize();
-		supportPoints = minkiSupportPoint(colliderA, transformA, colliderB, transformB, direction);
-		supportPoint = supportPoints[0] - supportPoints[1];
+		supportPoint = minkiSupportPoint(colliderA, transformA, colliderB, transformB, direction);
 
 		// Point doesn't passed the origin
 		// No collision
@@ -172,10 +224,18 @@ CollisionManifold GJK(Collider* colliderA, Transform* transformA, Collider* coll
 
 		points.push_front(supportPoint);
 
-		if (NextSimplex(points, direction))
-			return CollisionManifold(Vector2f(), 0);
+		if (NextSimplex(points, direction)) {
+			Vector2f collisionNormal = EPA(points, colliderA, transformA, colliderB, transformB);
+
+			auto manifold = CollisionManifold(collisionNormal, 0);
+			manifold.addCollisionPoint(Vector2f());
+			manifold.addCollisionPoint(Vector2f());
+
+			return manifold;
+		}
 	}	
-	
 }
+
+
 
 }

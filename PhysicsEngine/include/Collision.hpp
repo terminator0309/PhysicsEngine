@@ -11,6 +11,7 @@ namespace pe {
 
         CollisionManifold manifold;
 
+        Collision();
         Collision(pe::Object*, pe::Object*, CollisionManifold& );
         
     };
