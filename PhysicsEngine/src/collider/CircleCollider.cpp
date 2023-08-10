@@ -21,11 +21,11 @@ namespace pe {
         }
 
         CollisionManifold CircleCollider::testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) {
-            return pe::GJK(this, transform, otherCollider, otherTransform);
+            return pe::GJK(otherCollider, otherTransform, this, transform);
         }
 
         CollisionManifold CircleCollider::testCollision(Transform* transform, AABBCollider* otherCollider, Transform* otherTransform) {
-            return pe::GJK(this, transform, otherCollider, otherTransform);
+            return pe::GJK(otherCollider, otherTransform, this, transform);
         }
 
         std::string CircleCollider::getName() {

@@ -32,15 +32,18 @@ namespace game {
         sf::RectangleShape shape({ 200, 200 });
         
         game::DynamicWorld dw(WINDOW.width, WINDOW.height);
-        dw.setGravity(pe::Vector2f(0.0f));
+        dw.setGravity(pe::Vector2f(0, 2.0f));
 
-        CircleEntity circle1(pe::Vector2f(380, 200), 100, pe::Vector2f(4, 7));
-        CircleEntity circle2(pe::Vector2f(400, 410), 100, pe::Vector2f(-4, -5));
+        CircleEntity circle1(pe::Vector2f(380, 200), 30, pe::Vector2f(4, 7));
+        CircleEntity circle2(pe::Vector2f(400, 410), 30, pe::Vector2f(-4, -5));
         RectEntity rect(200, 200, sf::Vector2f(600,200), sf::Vector2f(-4, 5));
+        RectEntity platform(600, 100, sf::Vector2f(400, 600), {});
+        platform.setMass(0.0f);
 
         dw.addEntity(&circle1);
-        dw.addEntity(&rect);
+        //dw.addEntity(&rect);
         dw.addEntity(&circle2);
+        dw.addEntity(&platform);
 
         bool play = true;
 

@@ -13,6 +13,7 @@ namespace game{
         public:
         virtual void update() = 0;
         virtual sf::Shape* getShape() = 0;
+        void setMass(float mass);
 
         pe::Object* getObject();
 

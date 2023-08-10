@@ -26,7 +26,7 @@ namespace pe {
         auto relativeNormal = m->getNormal().normalize();
 
         // Moving away from each other, do nothing
-        if (relativeVelocity.dot(b->transform->position - a->transform->position) > 0.0f)
+        if (relativeVelocity.dot(relativeNormal) > 0.0f)
             return;
 
         float minCor = std::min(corA, corB);

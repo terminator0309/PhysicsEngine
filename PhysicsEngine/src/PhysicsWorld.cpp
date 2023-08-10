@@ -39,7 +39,7 @@ namespace pe {
         void PhysicsWorld::Step(float dt) {
             for (Object* object : m_objects) {
                 object->force += m_gravity * object->getMass();
-                object->velocity += (object->force / object->getMass()) * dt;
+                object->velocity += (object->force * object->getInverseMass()) * dt;
                 object->transform->position += object->velocity * dt;
 
                 // Reset the force
@@ -47,11 +47,11 @@ namespace pe {
 
                 // TEMP
                 // Bouncing of the boundary
-                if (object->transform->position.x - 100 <= 0 or object->transform->position.x +100 >= m_WorldWidth)
-                    object->velocity.x *= -object->cor;
+                //if (object->transform->position.x - 100 <= 0 or object->transform->position.x +100 >= m_WorldWidth)
+                //    object->velocity.x *= -object->cor;
 
-                if (object->transform->position.y - 100 <= 0 or object->transform->position.y + 100 >= m_WorldHeight)
-                    object->velocity.y *= -object->cor;
+                //if (object->transform->position.y - 100 <= 0 or object->transform->position.y + 100 >= m_WorldHeight)
+                  //  object->velocity.y *= -object->cor;
                 
             }
 

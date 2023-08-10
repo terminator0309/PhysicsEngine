@@ -58,11 +58,11 @@ namespace pe {
 	}
 
 	CollisionManifold AABBCollider::testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) {
-		return otherCollider->testCollision(otherTransform, this, transform);
+		return pe::GJK(otherCollider, otherTransform, this, transform);
 	}
 
 	CollisionManifold AABBCollider::testCollision(Transform* transform, AABBCollider* otherCollider, Transform* otherTransform) {
-		return pe::GJK(this, transform, otherCollider, otherTransform);
+		return pe::GJK(otherCollider, otherTransform, this, transform);
 	}
 
 	std::string AABBCollider::getName() {
