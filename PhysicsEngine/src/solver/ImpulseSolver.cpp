@@ -6,11 +6,29 @@ namespace pe {
 			this->solveCollision(collision);
 	}
 
+    void ImpulseSolver::seperateCollidingObjects(Object* a, Object* b, pe::Vector2f normal) {
+        float depth = normal.length();
+        auto unitNormal = normal.normalize();
+
+        if (a->getStatic()) {
+            b->transform->position += unitNormal * depth;
+        }
+        else if (b->getStatic()) {
+            a->transform->position -= unitNormal * depth;
+        }
+        else {
+            a->transform->position -= unitNormal * (depth / 2);
+            b->transform->position += unitNormal * (depth / 2);
+        }
+    }
+
 	void ImpulseSolver::solveCollision(Collision& collision) {
 
         auto a = collision.obj_a;
         auto b = collision.obj_b;
         auto m = &collision.manifold;
+
+        seperateCollidingObjects(a, b, m->getNormal());
 
         float inverseMassA = a->getInverseMass();
         float inverseMassB = b->getInverseMass();

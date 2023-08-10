@@ -71,6 +71,11 @@ namespace pe{
             y += other.y;
         }
 
+        void operator-=(const Vector& other) {
+            x -= other.x;
+            y -= other.y;
+        }
+
         bool operator==(const Vector& other) const {
             return x == other.x and y == other.y;
         }

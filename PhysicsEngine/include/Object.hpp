@@ -13,8 +13,9 @@ namespace pe{
         // 0 inverseMass denotes inf mass obj 
         float mass;
         float inverseMass;
+        bool isStatic;
         
-        public:
+    public:
         pe::Vector2f velocity;
         pe::Vector2f force;
 
@@ -30,6 +31,7 @@ namespace pe{
         void setMass(float);
         float getMass();
         float getInverseMass();
+        bool getStatic();
 
         ~Object();
     };

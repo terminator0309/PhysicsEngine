@@ -12,7 +12,8 @@ namespace pe {
         mass = randomMass;
         inverseMass = 1 / mass;
         //cor = pe::util::Random::getRandom((float)0.7, (float)1);
-        cor = 0.8;
+        cor = 0.5;
+        isStatic = false;
         std::cout << "Object created with velocity : " << velocity.x << " " << velocity.y << std::endl;
     }
 
@@ -26,8 +27,10 @@ namespace pe {
 
     void Object::setMass(float mass) {
         this->mass = mass;
-        if (mass == 0.0f)
+        if (mass == 0.0f) {
+            isStatic = true;
             inverseMass = 0.0f;
+        }
         else
             inverseMass = 1 / mass;
     }
@@ -38,6 +41,10 @@ namespace pe {
 
     float Object::getInverseMass() {
         return inverseMass;
+    }
+
+    bool Object::getStatic() {
+        return isStatic;
     }
 
     Object::~Object() {

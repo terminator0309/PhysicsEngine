@@ -34,7 +34,7 @@ namespace game {
         game::DynamicWorld dw(WINDOW.width, WINDOW.height);
         dw.setGravity(pe::Vector2f(0, 2.0f));
 
-        CircleEntity circle1(pe::Vector2f(380, 200), 30, pe::Vector2f(4, 7));
+        CircleEntity circle1(pe::Vector2f(380, 300), 30, pe::Vector2f(4, 7));
         CircleEntity circle2(pe::Vector2f(400, 410), 30, pe::Vector2f(-4, -5));
         RectEntity rect(200, 200, sf::Vector2f(600,200), sf::Vector2f(-4, 5));
         RectEntity platform(600, 100, sf::Vector2f(400, 600), {});
@@ -54,10 +54,15 @@ namespace game {
             {
                 if (isWindowClosed(event))
                     handleWindowClose(window);
-
+                
+                // SPACE pauses simulation
                 if (event.type == event.KeyPressed and sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
                     play = !play;
-     
+                
+                // RIGHT CLICK adds a circle
+                if (event.type == event.MouseButtonReleased and event.mouseButton.button == sf::Mouse::Right) {
+                    dw.addEntity(new CircleEntity({ (float)event.mouseButton.x, (float)event.mouseButton.y }, 30, {}));
+                }
             }
 
 
