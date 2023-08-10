@@ -30,7 +30,7 @@ namespace pe {
 		pe::Vector2f max = getMax(transform);
 
 		std::vector<pe::Vector2f> vertices = { pe::Vector2f(min.x, min.y), pe::Vector2f(min.x, max.y),
-											   pe::Vector2f(max.x, min.y), pe::Vector2f(max.x, max.y) };
+											   pe::Vector2f(max.x, max.y), pe::Vector2f(max.x, min.y) };
 
 		return vertices;
 	}
@@ -61,8 +61,9 @@ namespace pe {
 		return pe::GJK(otherCollider, otherTransform, this, transform);
 	}
 
-	CollisionManifold AABBCollider::testCollision(Transform* transform, AABBCollider* otherCollider, Transform* otherTransform) {
-		return pe::GJK(otherCollider, otherTransform, this, transform);
+	CollisionManifold AABBCollider::testCollision(Transform* transform, BoxCollider* otherCollider, Transform* otherTransform) {
+		return {};
+		//return pe::GJK(otherCollider, otherTransform, this, transform);
 	}
 
 	std::string AABBCollider::getName() {

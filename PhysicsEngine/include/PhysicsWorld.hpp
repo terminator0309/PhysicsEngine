@@ -18,6 +18,8 @@ namespace pe{
 
         public:
 
+            std::vector<pe::Vector2f> collisionPoints;
+
             PhysicsWorld();
 
             PhysicsWorld(int , int );

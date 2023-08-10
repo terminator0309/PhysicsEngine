@@ -227,9 +227,7 @@ CollisionManifold GJK(Collider* colliderA, Transform* transformA,
 		if (NextSimplex(points, direction)) {
 			Vector2f collisionNormal = EPA(points, colliderA, transformA, colliderB, transformB);
 
-			auto manifold = CollisionManifold(collisionNormal, 0);
-			manifold.addCollisionPoint(Vector2f());
-			manifold.addCollisionPoint(Vector2f());
+			CollisionManifold manifold(collisionNormal, 0);
 
 			return manifold;
 		}

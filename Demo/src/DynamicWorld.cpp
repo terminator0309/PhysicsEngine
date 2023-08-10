@@ -35,11 +35,17 @@ namespace game {
             for (Entity* entity : entities) {
                 window.draw(*entity->getShape());
             }
+            
+            for (auto point : pw->collisionPoints) {
+                auto tempRect = sf::RectangleShape({ 10, 10 });
+                tempRect.setPosition({ point.x-5, point.y-5 });
+                tempRect.setFillColor(sf::Color::Red);
+
+                window.draw(tempRect);
+            }
         }
 
         DynamicWorld::~DynamicWorld() {
-            for (Entity* entity : entities) {
-                //delete entity;
-            }
+            
         }
 }

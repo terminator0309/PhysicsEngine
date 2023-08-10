@@ -1,6 +1,7 @@
 #include "PhysicsWorld.hpp"
 #include "manifold/CollisionManifold.hpp"
 #include "solver/ImpulseSolver.hpp"
+#include "Algo.hpp"
 
 #include <set>
 
@@ -37,9 +38,13 @@ namespace pe {
         }
 
         void PhysicsWorld::Step(float dt) {
+            // TEMP
+            collisionPoints.clear();
+
             for (Object* object : m_objects) {
                 object->force += m_gravity * object->getMass();
                 object->velocity += (object->force * object->getInverseMass()) * dt;
+
                 object->transform->position += object->velocity * dt;
 
                 // Reset the force
@@ -64,6 +69,9 @@ namespace pe {
 
                     if (manifold.getIsColliding()) {
                         collisions.emplace_back(a, b, manifold);
+
+                        for(auto &point: manifold.getCollisionPoints())
+                            collisionPoints.push_back(point);
                     }
                 }
             }

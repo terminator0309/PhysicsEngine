@@ -9,5 +9,6 @@ namespace pe {
         float rotation;
 
         Transform(pe::Vector2f );
+        Transform(pe::Vector2f, float);
     };
 }

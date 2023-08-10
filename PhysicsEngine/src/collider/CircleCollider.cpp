@@ -5,6 +5,7 @@
 namespace pe {
         CircleCollider::CircleCollider(float r) {
             radius = r;
+            std::cout << "Object created of type: " << this->getName() << std::endl;
         };
 
         float CircleCollider::getRadius() {
@@ -21,12 +22,27 @@ namespace pe {
         }
 
         CollisionManifold CircleCollider::testCollision(Transform* transform, CircleCollider* otherCollider, Transform* otherTransform) {
-            return pe::GJK(otherCollider, otherTransform, this, transform);
-        }
+            auto manifold = pe::GJK(otherCollider, otherTransform, this, transform);
 
-        CollisionManifold CircleCollider::testCollision(Transform* transform, AABBCollider* otherCollider, Transform* otherTransform) {
-            return pe::GJK(otherCollider, otherTransform, this, transform);
+            if (manifold.getIsColliding()) {
+                auto point = algo::findContactPoints(this, transform, otherCollider, otherTransform)[0];
+                manifold.addCollisionPoint(point);
+            }
+
+            return manifold;
         }
+        
+        CollisionManifold CircleCollider::testCollision(Transform* transform, BoxCollider* otherCollider, Transform* otherTransform) {
+            auto manifold = pe::GJK(otherCollider, otherTransform, this, transform);
+
+            if (manifold.getIsColliding()) {
+                auto point = algo::findContactPoints(this, transform, otherCollider, otherTransform)[0];
+                manifold.addCollisionPoint(point);
+            }
+
+            return manifold;
+        }
+        
 
         std::string CircleCollider::getName() {
             return "Circle";

@@ -11,7 +11,22 @@ namespace pe {
 		this->normal = normal;
 		this->depth = depth;
 		this->isColliding = true;
+		this->collisionPoints.clear();
 	}
+
+	CollisionManifold::CollisionManifold(const CollisionManifold& otherManifold) {
+		this->normal = otherManifold.normal;
+		this->depth = otherManifold.depth;
+		this->isColliding = otherManifold.isColliding;
+
+		if (otherManifold.collisionPoints.size() == 0)
+			return;
+
+		for (auto point : otherManifold.collisionPoints) {
+			this->addCollisionPoint(point);
+		}
+	}
+
 
 	std::vector<pe::Vector2f> CollisionManifold::getCollisionPoints() {
 		return collisionPoints;
@@ -25,7 +40,7 @@ namespace pe {
 		return normal;
 	}
 
-	pe::Vector2f CollisionManifold::getDepth() {
+	float CollisionManifold::getDepth() {
 		return depth;
 	}
 

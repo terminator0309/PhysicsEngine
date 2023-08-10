@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 #include <vector>
 
 namespace pe {
@@ -20,6 +21,10 @@ namespace pe {
             return compare(x, y, FLOAT_MIN);
         }
 
+        bool compare(Vector2f a, Vector2f b) {
+            return compare(a.x, b.x) and compare(a.y, b.y);
+        }
+
         float degreeToRadian(float& degree) {
             return degree * PIE / 180;
         }
@@ -28,12 +33,12 @@ namespace pe {
             return radian * 180 / PIE;
         }
 
-        float distance2( pe::Vector2f&  point_a, pe::Vector2f&  point_b) {
+        float getDistanceSq( pe::Vector2f&  point_a, pe::Vector2f&  point_b) {
             return (point_a - point_b).getSquare();
         }
 
         float distance( pe::Vector2f&  point_a, pe::Vector2f&  point_b) {
-            return std::sqrt(distance2(point_a, point_b));
+            return std::sqrt(getDistanceSq(point_a, point_b));
         }
 
         pe::Vector2f PointRotator(pe::Vector2f  point, float angleDegree, pe::Vector2f center = pe::Vector2f()) {
@@ -50,7 +55,7 @@ namespace pe {
         }
 
         bool checkCircleCircleCollision(pe::CircleCollider* circleA, pe::Transform* transformA, pe::CircleCollider* circleB, pe::Transform* transformB) {
-            return std::pow(circleA->getRadius() + circleB->getRadius(), 2) >= distance2(transformA->position, transformB->position);
+            return std::pow(circleA->getRadius() + circleB->getRadius(), 2) >= getDistanceSq(transformA->position, transformB->position);
         }
 
         bool checkPointLineCollision(pe::Vector2f&  point, pe::LineCollider* line) {
@@ -74,7 +79,7 @@ namespace pe {
             auto center = transform->position;
             auto radius = circle->getRadius();
 
-            return distance2(point, center) == radius * radius;
+            return getDistanceSq(point, center) == radius * radius;
         } 
 
         bool checkPointAABBCollision(pe::Vector2f&  point, pe::AABBCollider* aabb, pe::Transform* transform) {
@@ -153,7 +158,7 @@ namespace pe {
                 return false;
             
             float t = (tmin < 0.0f) ? tmax : tmin;
-            return t > 0.0f and t * t < distance2(lineStart, lineEnd);
+            return t > 0.0f and t * t < getDistanceSq(lineStart, lineEnd);
         }
 
         bool checkLineBoxCollision(pe::LineCollider* line, pe::BoxCollider* box, pe::Transform* transform) {
@@ -463,13 +468,11 @@ namespace pe {
         }
 
         /**************************************************************/
-        // MANIFOLDS
+        // CONTACT POINTS
         /**************************************************************/
 
-        CollisionManifold findCollisionFeatures(CircleCollider* circleA, Transform* transformA, CircleCollider* circleB, Transform* transformB) {
-
-            if (not checkCircleCircleCollision(circleA, transformA, circleB, transformB))
-                return CollisionManifold();
+        std::vector<pe::Vector2f> findContactPoints(CircleCollider* circleA, Transform* transformA, 
+                                                    CircleCollider* circleB, Transform* transformB) {
            
             auto radiusA = circleA->getRadius();
             auto centerA = transformA->position;
@@ -477,24 +480,142 @@ namespace pe {
             auto radiusB = circleB->getRadius();
             auto centerB = transformB->position;
 
-            float sumRadii = radiusA + radiusB;
-            auto distance = centerA - centerB;
+            auto ab = centerB - centerA;
+            auto normal = ab.normalize();
 
-            // Taking mid point as collision point as of now that why 0.5, 
-            // consider velocity and mass to calculate exact factor
-            float depth = std::abs(distance.length() - sumRadii) * 0.5f;
-            
-            pe::Vector2f normal = distance.normalize();
+            auto contactPoint = centerA + normal * radiusA;
+            return { contactPoint };
+        }
 
-            float distanceToPoint = radiusA - depth;
+        Vector2f getClosestPointOnLineSegment(Vector2f targetPoint, Vector2f pointA, Vector2f pointB) {
+            auto ab = pointB - pointA;
+            auto ap = targetPoint - pointA;
 
-            auto contactPoint = centerA + normal * distanceToPoint;
+            float projection = ap.dot(ab);
+            float abLengthSq = ab.getSquare();
+            float d = projection / abLengthSq;
 
-            CollisionManifold result(normal, depth);
-            result.addCollisionPoint(contactPoint);
+            if (d <= 0.0f)
+                return pointA;
+            if (d >= 1.0f)
+                return pointB;
 
-            return result;
-        } 
+            return pointA + ab * d;
+        }
+
+        std::vector<pe::Vector2f> findContactPoints(CircleCollider* circle, Transform* transformCircle,
+                                                    BoxCollider* box,       Transform* transformBox)
+        {
+            Vector2f circleCenter = transformCircle->position;
+            float radius = circle->getRadius();
+
+            auto boxVertices = box->getVertices(transformBox);
+
+            Vector2f closestContactPoint;
+            float minDistanceSq = FLT_MAX;
+
+            for (size_t i = 0; i < boxVertices.size(); i++) {
+                Vector2f pointA = boxVertices[i];
+                Vector2f pointB = boxVertices[(i + 1) % boxVertices.size()];
+
+                Vector2f closestPoint = getClosestPointOnLineSegment(circleCenter, pointA, pointB);
+                float distanceSq = getDistanceSq(closestPoint, circleCenter);
+
+                if (distanceSq < minDistanceSq) {
+                    minDistanceSq = distanceSq;
+                    closestContactPoint = closestPoint;
+                }
+            }
+
+            return { closestContactPoint };
+        }
+
+        std::vector<pe::Vector2f> findContactPoints(CircleCollider* circle, Transform* transformCircle,
+                                                    AABBCollider* box, Transform* transformBox)
+        {
+            Vector2f circleCenter = transformCircle->position;
+            float radius = circle->getRadius();
+
+            auto boxVertices = box->getVertices(transformBox);
+
+            Vector2f closestContactPoint;
+            float minDistanceSq = FLT_MAX;
+
+            for (size_t i = 0; i < boxVertices.size(); i++) {
+                Vector2f pointA = boxVertices[i];
+                Vector2f pointB = boxVertices[(i + 1) % boxVertices.size()];
+
+                Vector2f closestPoint = getClosestPointOnLineSegment(circleCenter, pointA, pointB);
+                float distanceSq = getDistanceSq(closestPoint, circleCenter);
+
+                if (distanceSq < minDistanceSq) {
+                    minDistanceSq = distanceSq;
+                    closestContactPoint = closestPoint;
+                }
+            }
+
+            return { closestContactPoint };
+        }
+
+        std::vector<pe::Vector2f> findContactPoints(BoxCollider* boxA, Transform* transformA,
+            BoxCollider* boxB, Transform* transformB) {
+
+            auto boxAVertices = boxA->getVertices(transformA);
+            auto boxBVertices = boxB->getVertices(transformB);
+
+            float minDistanceSq = FLT_MAX;
+            std::vector<pe::Vector2f> contactPoints(1, pe::Vector2f(FLT_MIN));
+
+            for (size_t i = 0; i < boxAVertices.size(); i++) {
+                auto pointA = boxAVertices[i];
+
+                for (size_t j = 0; j < boxBVertices.size(); j++) {
+                    auto pointBa = boxBVertices[j];
+                    auto pointBb = boxBVertices[(j + 1) % boxBVertices.size()];
+
+                    auto closestPoint = getClosestPointOnLineSegment(pointA, pointBa, pointBb);
+
+                    float distanceSq = getDistanceSq(pointA, closestPoint);
+
+                    if (compare(distanceSq, minDistanceSq)) {
+                        if (not compare(closestPoint, contactPoints[0])) {
+                            if (contactPoints.size() == 1) contactPoints.push_back(closestPoint);
+                            else contactPoints[1] = closestPoint;
+                        }
+                    }
+                    else if (distanceSq < minDistanceSq) {
+                        minDistanceSq = distanceSq;
+                        contactPoints[0] = closestPoint;
+                    }
+                }
+            }
+
+            for (size_t i = 0; i < boxBVertices.size(); i++) {
+                auto pointB = boxBVertices[i];
+
+                for (size_t j = 0; j < boxAVertices.size(); j++) {
+                    auto pointAa = boxAVertices[j];
+                    auto pointAb = boxAVertices[(j + 1) % boxAVertices.size()];
+
+                    auto closestPoint = getClosestPointOnLineSegment(pointB, pointAa, pointAb);
+
+                    float distanceSq = getDistanceSq(pointB, closestPoint);
+
+                    if (compare(distanceSq, minDistanceSq)) {
+                        if (not compare(closestPoint, contactPoints[0])) {
+                            if (contactPoints.size() == 1) contactPoints.push_back(closestPoint);
+                            else contactPoints[1] = closestPoint;
+                        }
+                    }
+                    else if (distanceSq < minDistanceSq) {
+                        minDistanceSq = distanceSq;
+                        contactPoints[0] = closestPoint;
+                    }
+                }
+            }
+
+            return contactPoints;
+        }
     }
 
 

@@ -36,7 +36,9 @@ namespace game {
 
         CircleEntity circle1(pe::Vector2f(380, 300), 30, pe::Vector2f(4, 7));
         CircleEntity circle2(pe::Vector2f(400, 410), 30, pe::Vector2f(-4, -5));
-        RectEntity rect(200, 200, sf::Vector2f(600,200), sf::Vector2f(-4, 5));
+        RectEntity rect1(50, 50, sf::Vector2f(600,200), sf::Vector2f());
+        RectEntity rect2(50, 50, sf::Vector2f(600, 200), sf::Vector2f());
+
         RectEntity platform(600, 100, sf::Vector2f(400, 600), {});
         platform.setMass(0.0f);
 
@@ -46,6 +48,24 @@ namespace game {
         dw.addEntity(&platform);
 
         bool play = true;
+
+        sf::Clock clock;
+        float lastTime = 0;
+        int fps = 0;
+
+        sf::Font font;
+        if (not font.loadFromFile("F:/C++/Game/font.ttf")) {
+            std::cout << "cannot load font\n";
+            return;
+        }
+
+        sf::Text fpsWindowText;
+        fpsWindowText.setFont(font);
+        fpsWindowText.setCharacterSize(24);
+        fpsWindowText.setPosition(10, 10);
+        fpsWindowText.setFillColor(sf::Color::Green);
+
+        
 
         while (window.isOpen())
         {
@@ -63,6 +83,11 @@ namespace game {
                 if (event.type == event.MouseButtonReleased and event.mouseButton.button == sf::Mouse::Right) {
                     dw.addEntity(new CircleEntity({ (float)event.mouseButton.x, (float)event.mouseButton.y }, 30, {}));
                 }
+
+                // RIGHT CLICK adds a circle
+                if (event.type == event.MouseButtonReleased and event.mouseButton.button == sf::Mouse::Left) {
+                    dw.addEntity(new RectEntity(50, 50, { (float)event.mouseButton.x, (float)event.mouseButton.y }, sf::Vector2f()));
+                }
             }
 
 
@@ -73,7 +98,18 @@ namespace game {
 
             dw.draw(window);
 
+            // FPS
+
+            float elapsedTime = clock.getElapsedTime().asSeconds();
+            if (elapsedTime > 1) {
+                clock.restart();
+                fpsWindowText.setString(std::to_string(fps));
+                fps = 0;
+            }
+            window.draw(fpsWindowText);
+
             window.display();
+            fps++;
         }
     }
 }

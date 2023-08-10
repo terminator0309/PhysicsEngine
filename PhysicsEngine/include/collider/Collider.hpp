@@ -4,10 +4,11 @@
 #include "manifold/CollisionManifold.hpp"
 
 #include <string>
+#include <iostream>
 
 namespace pe {
     
-    class AABBCollider;
+    class BoxCollider;
     class CircleCollider;
 
     class Collider {
@@ -21,7 +22,7 @@ namespace pe {
 
         virtual CollisionManifold testCollision(Transform* tranform, CircleCollider* otherCollider, Transform* otherTransform) = 0;
 
-        virtual CollisionManifold testCollision(Transform* tranform, AABBCollider* otherCollider, Transform* otherTransform) = 0;
+        virtual CollisionManifold testCollision(Transform* tranform, BoxCollider* otherCollider, Transform* otherTransform) = 0;
     };
 
     

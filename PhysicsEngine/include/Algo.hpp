@@ -25,12 +25,13 @@ namespace pe {
         /// (https://realtimecollisiondetection.net/blog/?p=89) 
         bool compare(float x, float y, float epsilon);
         bool compare(float x, float y);
+        bool compare(Vector2f a, Vector2f b);
 
         float degreeToRadian(float& degree);
         float radianToDegree(float& radian);
 
         // returns squared distance between two points
-        float distance2( pe::Vector2f& point_a,  pe::Vector2f& point_b);
+        float distanceSq( pe::Vector2f& point_a,  pe::Vector2f& point_b);
         float distance( pe::Vector2f& point_a,  pe::Vector2f& point_b);
 
         pe::Vector2f PointRotator(pe::Vector2f , float , pe::Vector2f );
@@ -114,11 +115,20 @@ namespace pe {
 
 
         /**************************************************************/
-        // MANIFOLDS
+        // CONTACT POINTS
         /**************************************************************/
+        Vector2f getClosestPointOnLineSegment(Vector2f targetPoint, Vector2f pointA, Vector2f pointB);
 
-        CollisionManifold findCollisionFeatures(CircleCollider* circleA, Transform* transformA, CircleCollider* circleB, Transform* transformB);
+        std::vector<pe::Vector2f> findContactPoints(CircleCollider* circleA, Transform* transformA,
+                                                    CircleCollider* circleB, Transform* transformB);
 
+        std::vector<pe::Vector2f> findContactPoints(CircleCollider* circle, Transform* transformCircle,
+                                                    BoxCollider* box,       Transform* transformBox);
 
+        std::vector<pe::Vector2f> findContactPoints(CircleCollider* circle, Transform* transformCircle,
+                                                    AABBCollider* box,      Transform* transformBox);
+
+        std::vector<pe::Vector2f> findContactPoints(BoxCollider* boxA, Transform* transformA,
+                                                    BoxCollider* boxB, Transform* transformB);
     }
 }

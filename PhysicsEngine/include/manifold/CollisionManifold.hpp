@@ -16,11 +16,13 @@ namespace pe {
 
 		CollisionManifold(pe::Vector2f , float );
 
+		CollisionManifold(const CollisionManifold& otherManifold);
+
 		pe::Vector2f getNormal();
 
 		std::vector<pe::Vector2f> getCollisionPoints();
 		
-		pe::Vector2f getDepth();
+		float getDepth();
 		
 		bool getIsColliding();
 		

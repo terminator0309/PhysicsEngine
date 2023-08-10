@@ -12,9 +12,9 @@ namespace pe {
         mass = randomMass;
         inverseMass = 1 / mass;
         //cor = pe::util::Random::getRandom((float)0.7, (float)1);
-        cor = 0.5;
+        cor = 0.2;
         isStatic = false;
-        std::cout << "Object created with velocity : " << velocity.x << " " << velocity.y << std::endl;
+        
     }
 
     Object::Object(Object& obj) {
