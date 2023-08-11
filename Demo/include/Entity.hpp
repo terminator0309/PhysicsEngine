@@ -10,11 +10,11 @@ namespace game{
         pe::Object* m_object;
         
 
-        public:
+    public:
         virtual void update() = 0;
-        virtual sf::Shape* getShape() = 0;
-        void setMass(float mass);
 
+        virtual sf::Shape* getShape() = 0;
+        virtual void setMass(float mass);
         pe::Object* getObject();
 
         virtual ~Entity();

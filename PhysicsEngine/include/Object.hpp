@@ -14,9 +14,12 @@ namespace pe{
         float mass;
         float inverseMass;
         bool isStatic;
-        
+        float inertia;
+        float inverseInertia;
+
     public:
         pe::Vector2f velocity;
+        float angularVelocity;
         pe::Vector2f force;
 
         // Coefficient of restitution
@@ -31,6 +34,16 @@ namespace pe{
         void setMass(float);
         float getMass();
         float getInverseMass();
+
+        void setInertia(float);
+        float getInertia();
+        float getInverseInertia();
+
+        Vector2f getPosition();
+        void setPosition(Vector2f);
+        float getRotation();
+        void setRotation(float);
+
         bool getStatic();
 
         ~Object();

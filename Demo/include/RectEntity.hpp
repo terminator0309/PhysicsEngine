@@ -8,6 +8,8 @@ namespace game {
 		sf::RectangleShape* m_rect;
 
 		RectEntity(float, float, sf::Vector2f, sf::Vector2f);
+		
+		void setMass(float) override;
 
 		void update() override;
 

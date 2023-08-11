@@ -41,10 +41,11 @@ namespace game {
 
         RectEntity platform(600, 100, sf::Vector2f(400, 600), {});
         platform.setMass(0.0f);
-
-        dw.addEntity(&circle1);
-        //dw.addEntity(&rect);
-        dw.addEntity(&circle2);
+        platform.getShape()->setFillColor(sf::Color::Magenta);
+        
+        //dw.addEntity(&circle1);
+        dw.addEntity(&rect1);
+        //dw.addEntity(&circle2);
         dw.addEntity(&platform);
 
         bool play = true;

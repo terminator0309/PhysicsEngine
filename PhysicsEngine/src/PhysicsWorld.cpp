@@ -42,14 +42,21 @@ namespace pe {
             collisionPoints.clear();
 
             for (Object* object : m_objects) {
+                if (object->getStatic())
+                    continue;
+
                 object->force += m_gravity * object->getMass();
                 object->velocity += (object->force * object->getInverseMass()) * dt;
 
                 object->transform->position += object->velocity * dt;
+                object->transform->rotation += object->angularVelocity * dt;
 
                 // Reset the force
                 object->force = pe::Vector2f();
-                
+
+                // TEMP removing
+                if (object->getPosition().y > 2 * m_WorldHeight)
+                    RemoveObject(object);
             }
 
             auto collisions = ResolveCollision();

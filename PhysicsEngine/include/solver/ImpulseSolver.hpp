@@ -8,7 +8,8 @@ namespace pe {
 		void solve(std::vector<Collision>&) override;
 
 	private:
-		void seperateCollidingObjects(Object* a, Object* b, pe::Vector2f normal);
+		void seperateCollidingObjects(Collision& );
 		void solveCollision(Collision&);
+		void solveCollisionWithRotation(Collision& );
 	};
 }

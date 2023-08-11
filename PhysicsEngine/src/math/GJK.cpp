@@ -170,6 +170,8 @@ Vector2f EPA(Simplex& simplex, Collider* colliderA, Transform* transformA,
 
 			auto ij = vertexJ - vertexI;
 			Vector2f normal = Vector2f(ij.y, -ij.x).normalize();
+
+			// Distance of edge IJ from origin
 			float distance = normal.dot(vertexI);
 
 			if (distance < 0) {
@@ -189,13 +191,17 @@ Vector2f EPA(Simplex& simplex, Collider* colliderA, Transform* transformA,
 
 		// If we found a new support point in the direction of normal
 		// We add it to the list and try again
+		// sDistance is the perpendicular distance of support point edge from the min normal edge
+		// Alternatively, we can check if we already had this support point
 		if (std::abs(sDistance - minDistance) > 0.001) {
 			minDistance = FLT_MAX;
 			simplexPoints.insert(simplexPoints.begin() + minIndex, supportPoint);
 		}
 	}
 
-	return minNormal * (minDistance + 0.001f);
+	// Adding small value to have a little space when we seperate out the objects before collision
+	float smallSeperationMargin = 0.0001f;
+	return minNormal * (minDistance + smallSeperationMargin);
 }
 
 CollisionManifold GJK(Collider* colliderA, Transform* transformA, 

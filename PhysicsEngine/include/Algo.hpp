@@ -27,8 +27,8 @@ namespace pe {
         bool compare(float x, float y);
         bool compare(Vector2f a, Vector2f b);
 
-        float degreeToRadian(float& degree);
-        float radianToDegree(float& radian);
+        float degreeToRadian(float degree);
+        float radianToDegree(float radian);
 
         // returns squared distance between two points
         float distanceSq( pe::Vector2f& point_a,  pe::Vector2f& point_b);
@@ -130,5 +130,15 @@ namespace pe {
 
         std::vector<pe::Vector2f> findContactPoints(BoxCollider* boxA, Transform* transformA,
                                                     BoxCollider* boxB, Transform* transformB);
+
+        
+        /**************************************************************/
+        // INERTIA
+        /**************************************************************/
+
+        float getBoxInertia(float mass, float width, float height);
+
+        float getCircleInertia(float mass, float radius);
+
     }
 }

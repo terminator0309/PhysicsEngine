@@ -90,6 +90,10 @@ namespace pe{
             return x * other.x + y * other.y;
         }
 
+        T cross(Vector other) {
+            return x * other.y - y * other.x;
+        }
+
         Vector normalize() {
             return (*this / std::sqrt(this->getSquare()));
         }

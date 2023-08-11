@@ -25,11 +25,11 @@ namespace pe {
             return compare(a.x, b.x) and compare(a.y, b.y);
         }
 
-        float degreeToRadian(float& degree) {
+        float degreeToRadian(float degree) {
             return degree * PIE / 180;
         }
 
-        float radianToDegree(float& radian) {
+        float radianToDegree(float radian) {
             return radian * 180 / PIE;
         }
 
@@ -616,9 +616,18 @@ namespace pe {
 
             return contactPoints;
         }
+
+        /**************************************************************/
+        // INERTIA
+        /**************************************************************/
+
+        float getBoxInertia(float mass, float width, float height) {
+            return (1.0f / 12) * mass * (width * width + height * height);
+        }
+
+        float getCircleInertia(float mass, float radius) {
+            return mass * radius * radius / 2;
+        }
     }
-
-
-        
     
 }

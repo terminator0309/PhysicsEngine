@@ -1,6 +1,7 @@
 #include "RectEntity.hpp"
 #include "collider/BoxCollider.hpp"
 #include "Util.hpp"
+#include "Algo.hpp"
 
 namespace game {
 	RectEntity::RectEntity(float width, float height, sf::Vector2f position, sf::Vector2f vel) {
@@ -13,14 +14,23 @@ namespace game {
 
 		m_object->collider = new pe::BoxCollider(min, max);
 		m_object->velocity = pe::Vector2f(vel.x, vel.y);
+		m_object->setInertia(pe::algo::getBoxInertia(m_object->getMass(), width, height));
 
 		m_rect = new sf::RectangleShape(sf::Vector2f(width, height));
-		m_rect->setPosition(position);
+		m_rect->setOrigin({width / 2, height / 2});
+		m_rect->setFillColor(sf::Color::Green);
+	}
+
+	void RectEntity::setMass(float mass) {
+		auto size = m_rect->getSize();
+
+		m_object->setMass(mass);
+		m_object->setInertia(pe::algo::getBoxInertia(m_object->getMass(), size.x, size.y));
 	}
 
 	void RectEntity::update() {
-		auto position = m_object->transform->position;
-		m_rect->setPosition(sf::Vector2f(position.x - m_rect->getSize().x/2, position.y - m_rect->getSize().y/2));
+		m_rect->setPosition(util::convert(m_object->transform->position));
+		m_rect->setRotation(m_object->transform->rotation);
 	}
 
 	sf::RectangleShape* RectEntity::getShape() {
