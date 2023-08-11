@@ -7,17 +7,20 @@ Primitive supported: Point, line, AABB (Axis Aligned Bounding Box), OBB (Oriente
 As of now
 
 :white_check_mark: It has :
-- Primitive shape motion simulation
-- Primitive shape vs primitive shape collision detection
-- GJK for 2D
-- [Impulse Solver](https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf)
+
+-   Primitive shape motion simulation
+-   Primitive shape vs primitive shape collision detection
+-   GJK for 2D
+-   [Impulse Solver](https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf)
+-   Angular velocity with shapes
+-   Collision resolution of boxes
 
 :memo: TODO :
-- Move to smart pointers
-- Angular velocity with shapes
-- Collision resolution of boxes
-- Broad phase collision detection (Quad tree)
-- Logging and unit testing
+
+-   Friction
+-   Move to smart pointers
+-   Broad phase collision detection (Quad tree)
+-   Logging and unit testing
 
 ## Getting started
 
